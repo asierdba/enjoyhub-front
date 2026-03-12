@@ -1,2 +1,53 @@
-# what-read-today
-WhatReadToday is a book discovery web platform based on user interests. A Capstone Project (DAW) developed by Valentina Noreña and Asier de Blas to connect readers with their next great story.
+📚 WhatReadToday - Discover Your Next Great Story
+Welcome to the WhatReadToday repository! This project is the final result of our Capstone Project (TFG) for the Higher Degree in Web Application Development (DAW).
+
+WhatReadToday is a platform designed for book lovers seeking their next literary adventure. Through an intuitive interface, users can explore and discover books that perfectly match their personal tastes and interests.
+
+👥 Authors
+This project was developed with ❤️ by:
+
+Valentina Noreña - GitHub Profile
+
+asierdba - GitHub Profile
+
+🚀 Main Features
+Personalized Recommendations: Filtering algorithm based on user genres and preferences.
+
+Detailed Book Profiles: Comprehensive information including synopses and ratings.
+
+Responsive Interface: Optimized experience for both desktop and mobile devices.
+
+User Management: Registration and personalized profiles to save "to-read" lists.
+
+🛠️ Tech Stack
+The following technologies were used to build this platform:
+
+Frontend: HTML5, CSS3, TypeScript, Angular.
+
+Backend: PHP.
+
+Database: MySQL
+
+Version Control: Git & GitHub.
+
+📂 Project Structure
+Plaintext
+├── src/            # Application source code
+├── docs/           # TFG documentation and manuals
+├── public/         # Public files and assets
+└── database/       # Database scripts and diagrams
+
+⚙️ Installation & Setup
+Clone the repository:
+git clone https://github.com/asierdba/WhatReadToday.git
+
+Install dependencies:
+npm install
+
+Set up your .env file.
+
+Run the project:
+npm start
+
+[!IMPORTANT]
+This project was created for academic purposes as part of the Web Application Development (DAW) Final Project module.
