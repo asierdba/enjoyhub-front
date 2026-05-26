@@ -1,19 +1,22 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Book } from '../models/book.model';
-
-const API = 'http://127.0.0.1:8000/enjoyhub';
+import { Content } from '../models/content.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class BookService {
   private http = inject(HttpClient);
 
-  getBooks(): Observable<Book[]> {
-    return this.http.get<Book[]>(`${API}/books`);
+  getBooks(): Observable<Content[]> {
+    return this.http.get<Content[]>(`${environment.apiUrl}/books`);
   }
 
-  getBookById(id: number): Observable<Book> {
-    return this.http.get<Book>(`${API}/books/${id}`);
+  getBookById(id: number): Observable<Content> {
+    return this.http.get<Content>(`${environment.apiUrl}/books/${id}`);
+  }
+
+  getBooksByEmotion(emotionId: number): Observable<Content[]> {
+    return this.http.get<Content[]>(`${environment.apiUrl}/books/by-emotion/${emotionId}`);
   }
 }
