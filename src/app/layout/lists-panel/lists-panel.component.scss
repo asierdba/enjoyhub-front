@@ -1,0 +1,162 @@
+.panel {
+  width: 240px;
+  min-width: 240px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1.25rem 1rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.2);
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+  }
+
+  &__add-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: 0.2s ease;
+
+    &:hover {
+      background: var(--accent-muted);
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+  }
+
+  // --- Nueva lista ---
+  &__new-list {
+    display: flex;
+    gap: 0.4rem;
+    margin-bottom: 0.5rem;
+
+    &-input {
+      flex: 1;
+      padding: 0.4rem 0.6rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      color: var(--white);
+      font-size: 0.82rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+
+      &:focus {
+        border-color: var(--accent);
+      }
+
+      &::placeholder {
+        color: var(--text-muted);
+      }
+    }
+
+    &-confirm {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      border: none;
+      background: var(--accent);
+      color: var(--accent-dark);
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+
+      &:hover { opacity: 0.85; }
+    }
+  }
+
+  // --- Listas ---
+  &__lists {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  &__list {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 0.75rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.03);
+    cursor: default;
+    transition: 0.2s ease;
+
+    // CDK aplica estas clases automáticamente
+    &.cdk-drop-list-receiving {
+      border-color: var(--accent);
+      background: var(--accent-muted);
+      transform: scale(1.02);
+    }
+
+    &-name {
+      font-size: 0.88rem;
+      color: var(--white);
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  // --- Estados vacíos / locked ---
+  &__empty,
+  &__loading {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 1.5rem 0;
+  }
+
+  &__locked {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 2rem 0.5rem;
+    text-align: center;
+
+    &-icon {
+      font-size: 1.5rem;
+      color: var(--text-muted);
+      opacity: 0.5;
+    }
+
+    p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+  }
+}

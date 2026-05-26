@@ -1,3 +1,20 @@
-<footer>
-  <!-- Footer -->
+<footer class="footer">
+
+  <span class="footer__copy">
+    © {{ year }} Enjoyhub — Todos los derechos reservados
+  </span>
+
+  <nav class="footer__socials">
+    @for (social of socials; track social.label) {
+      <a
+        class="footer__social-btn"
+        [href]="social.url"
+        [title]="social.label"
+        target="_blank"
+      >
+        <fa-icon [icon]="social.icon" />
+      </a>
+    }
+  </nav>
+
 </footer>

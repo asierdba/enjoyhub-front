@@ -1,4 +1,63 @@
-<aside>
-  <!-- Panel lateral derecho con las listas del usuario -->
-  <!-- Zona de drop para arrastrar tarjetas -->
+<aside class="panel">
+
+  <div class="panel__header">
+    <span class="panel__title">
+      <fa-icon [icon]="icons.faList" />
+      Mis listas
+    </span>
+    @if (isLoggedIn()) {
+      <button class="panel__add-btn" (click)="toggleInput()" title="Nueva lista">
+        <fa-icon [icon]="icons.faPlus" />
+      </button>
+    }
+  </div>
+
+  @if (showInput()) {
+    <div class="panel__new-list">
+      <input
+        class="panel__new-list-input"
+        type="text"
+        placeholder="Nombre de la lista..."
+        [value]="newListName()"
+        (input)="onInputChange($event)"
+        (keydown)="onInputKeydown($event)"
+        autofocus
+      />
+      <button class="panel__new-list-confirm" (click)="createList()">
+        <fa-icon [icon]="icons.faPlus" />
+      </button>
+    </div>
+  }
+
+  @if (!isLoggedIn()) {
+    <div class="panel__locked">
+      <fa-icon [icon]="icons.faLock" class="panel__locked-icon" />
+      <p>Inicia sesión para gestionar tus listas</p>
+    </div>
+  }
+
+  @if (isLoggedIn() && loading()) {
+    <div class="panel__loading">Cargando listas...</div>
+  }
+
+  @if (isLoggedIn() && !loading()) {
+    <ul class="panel__lists">
+      @for (list of lists(); track list.listId) {
+        <li
+          class="panel__list"
+          cdkDropList
+          cdkDropListSortingDisabled
+          [id]="'list-' + list.listId"
+          [cdkDropListConnectedTo]="['deck']"
+          (cdkDropListDropped)="onDrop($event, list.listId)"
+        >
+          <span class="panel__list-name">{{ list.name }}</span>
+        </li>
+      }
+      @if (lists().length === 0) {
+        <li class="panel__empty">Aún no tienes listas</li>
+      }
+    </ul>
+  }
+
 </aside>
