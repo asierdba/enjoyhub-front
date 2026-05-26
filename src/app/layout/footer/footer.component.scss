@@ -1,0 +1,37 @@
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  height: 48px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+  &__copy {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
+  &__socials {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  &__social-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.2s ease, background-color 0.2s ease;
+
+    &:hover {
+      color: var(--accent);
+      background-color: var(--accent-muted);
+    }
+  }
+}
