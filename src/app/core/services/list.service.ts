@@ -1,24 +1,36 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { BookList } from '../models/list.model';
-import { Book } from '../models/book.model';
+import { UserList } from '../models/list.model';
+import { Content } from '../models/content.model';
+import { environment } from '../../../environments/environment';
 
-const API = 'http://127.0.0.1:8000/enjoyhub';
+interface ListItemResponse {
+  listId: number;
+  contentId: number;
+}
 
 @Injectable({ providedIn: 'root' })
 export class ListService {
   private http = inject(HttpClient);
 
-  getListsByUser(userId: number): Observable<BookList[]> {
-    return this.http.get<BookList[]>(`${API}/users/${userId}/lists`);
+  getListsByUser(userId: number): Observable<UserList[]> {
+    return this.http.get<UserList[]>(`${environment.apiUrl}/users/${userId}/lists`);
   }
 
-  addBookToList(listId: number, book: Book): Observable<BookList> {
-    return this.http.post<BookList>(`${API}/lists/${listId}/books`, { bookId: book.id });
+  createList(userId: number, name: string, description?: string): Observable<UserList> {
+    return this.http.post<UserList>(`${environment.apiUrl}/users/${userId}/lists`, { name, description });
   }
 
-  removeBookFromList(listId: number, bookId: number): Observable<BookList> {
-    return this.http.delete<BookList>(`${API}/lists/${listId}/books/${bookId}`);
+  getItemsByList(listId: number): Observable<Content[]> {
+    return this.http.get<Content[]>(`${environment.apiUrl}/lists/${listId}/items`);
+  }
+
+  addItemToList(listId: number, contentId: number): Observable<ListItemResponse> {
+    return this.http.post<ListItemResponse>(`${environment.apiUrl}/lists/${listId}/items`, { contentId });
+  }
+
+  deleteItemFromList(listId: number, contentId: number): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${environment.apiUrl}/lists/${listId}/items/${contentId}`);
   }
 }

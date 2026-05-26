@@ -1,8 +1,6 @@
-import { Book } from './book.model';
-
-export interface BookList {
-  id: number;
+export interface UserList {
+  listId: number;
   userId: number;
   name: string;
-  books: Book[];
+  description?: string;
 }

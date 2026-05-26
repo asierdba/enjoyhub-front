@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Book } from '../../../core/models/book.model';
+import { Content } from '../../../core/models/content.model';
 
 @Component({
   selector: 'app-content-card',
@@ -9,5 +9,5 @@ import { Book } from '../../../core/models/book.model';
   styleUrl: './content-card.component.scss',
 })
 export class ContentCardComponent {
-  book = input.required<Book>();
+  content = input.required<Content>();
 }
