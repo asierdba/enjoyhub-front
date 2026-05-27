@@ -7,7 +7,7 @@ export const routes: Routes = [
   },
   {
     path: 'auth/register',
-    loadComponent: () => import('./features/auth/register/register.component').then(m => m.RegisterComponent),
+    redirectTo: '',
   },
   {
     path: 'dashboard',

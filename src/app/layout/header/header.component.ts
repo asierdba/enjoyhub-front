@@ -12,9 +12,14 @@ import {
   faTv,
   faGamepad,
   faRightFromBracket,
+  faPen,
+  faKey,
 } from '@fortawesome/free-solid-svg-icons';
 import { ThemeService } from '../../core/services/theme.service';
 import { AuthService } from '../../core/services/auth.service';
+import { RegisterModalService } from '../../core/services/register-modal.service';
+import { EditProfileModalService } from '../../core/services/edit-profile-modal.service';
+import { getProfileIcon, PROFILE_ICONS } from '../../core/constants/profile-icons';
 import { ContentType } from '../../core/models/content.model';
 
 interface Category {
@@ -30,11 +35,13 @@ interface Category {
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
-  private themeService = inject(ThemeService);
-  private authService  = inject(AuthService);
-  private fb           = inject(FormBuilder);
+  private themeService     = inject(ThemeService);
+  private authService      = inject(AuthService);
+  private registerModal    = inject(RegisterModalService);
+  private editProfileModal = inject(EditProfileModalService);
+  private fb               = inject(FormBuilder);
 
-  icons = { faList, faUser, faChevronDown, faRightFromBracket };
+  icons = { faList, faUser, faChevronDown, faRightFromBracket, faPen, faKey };
 
   categories: Category[] = [
     { id: 'book',   label: 'Libros',      icon: faBook    },
@@ -49,6 +56,7 @@ export class HeaderComponent {
   authLoading  = signal(false);
 
   currentUser  = this.authService.currentUser;
+  profileIcons = PROFILE_ICONS;
 
   loginForm = this.fb.group({
     email:    ['', [Validators.required, Validators.email]],
@@ -57,6 +65,16 @@ export class HeaderComponent {
 
   get activeCategory() {
     return this.themeService.activeCategory();
+  }
+
+  get currentUserIcon() {
+    const icon = this.authService.currentUser()?.profileIcon;
+    return icon ? getProfileIcon(icon) : faUser;
+  }
+
+  openRegisterModal(): void {
+    this.closeUserMenu();
+    this.registerModal.open();
   }
 
   get activeCategoryLabel() {
@@ -114,6 +132,22 @@ export class HeaderComponent {
         this.authError.set(err?.error?.message ?? 'Credenciales incorrectas');
       },
     });
+  }
+
+  openEditProfile(): void {
+    this.closeUserMenu();
+    this.editProfileModal.openProfile();
+  }
+
+  openEditPassword(): void {
+    this.closeUserMenu();
+    this.editProfileModal.openPassword();
+  }
+
+  onSelectIcon(iconId: string): void {
+    const userId = this.authService.currentUser()?.userId;
+    if (!userId) return;
+    this.authService.updateProfileIcon(userId, iconId).subscribe();
   }
 
   onLogout(): void {
