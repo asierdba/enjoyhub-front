@@ -1,0 +1,115 @@
+@if (modalService.mode() !== null) {
+  <div class="ep-overlay" (click)="close()">
+    <div class="ep-modal" (click)="$event.stopPropagation()">
+
+      <button class="ep-modal__close" type="button" (click)="close()">
+        <fa-icon [icon]="icons.faXmark" />
+      </button>
+
+      <!-- EDITAR PERFIL -->
+      @if (modalService.mode() === 'profile') {
+        <div class="ep-modal__header">
+          <h2 class="ep-modal__title">Editar perfil</h2>
+          <p class="ep-modal__subtitle">Actualiza tu nombre de usuario o correo electrónico</p>
+        </div>
+
+        @if (error()) {
+          <p class="ep-modal__error">{{ error() }}</p>
+        }
+        @if (success()) {
+          <p class="ep-modal__success">{{ success() }}</p>
+        }
+
+        <form class="ep-modal__form" [formGroup]="profileForm" (ngSubmit)="submitProfile()">
+          <div class="ep-modal__field">
+            <label class="ep-modal__label" for="ep-userName">Nombre de usuario</label>
+            <input
+              id="ep-userName"
+              class="ep-modal__input"
+              formControlName="userName"
+              type="text"
+              autocomplete="username"
+            />
+          </div>
+          <div class="ep-modal__field">
+            <label class="ep-modal__label" for="ep-email">Correo electrónico</label>
+            <input
+              id="ep-email"
+              class="ep-modal__input"
+              formControlName="email"
+              type="email"
+              autocomplete="email"
+            />
+          </div>
+          <button
+            class="ep-modal__submit"
+            type="submit"
+            [disabled]="profileForm.invalid || loading()"
+          >
+            {{ loading() ? 'Guardando...' : 'Guardar cambios' }}
+          </button>
+        </form>
+      }
+
+      <!-- CAMBIAR CONTRASEÑA -->
+      @if (modalService.mode() === 'password') {
+        <div class="ep-modal__header">
+          <h2 class="ep-modal__title">Cambiar contraseña</h2>
+          <p class="ep-modal__subtitle">Introduce tu contraseña actual y la nueva</p>
+        </div>
+
+        @if (error()) {
+          <p class="ep-modal__error">{{ error() }}</p>
+        }
+        @if (success()) {
+          <p class="ep-modal__success">{{ success() }}</p>
+        }
+
+        <form class="ep-modal__form" [formGroup]="passwordForm" (ngSubmit)="submitPassword()">
+          <div class="ep-modal__field">
+            <label class="ep-modal__label" for="ep-current">Contraseña actual</label>
+            <input
+              id="ep-current"
+              class="ep-modal__input"
+              formControlName="currentPassword"
+              type="password"
+              autocomplete="current-password"
+            />
+          </div>
+          <div class="ep-modal__field">
+            <label class="ep-modal__label" for="ep-new">Nueva contraseña</label>
+            <input
+              id="ep-new"
+              class="ep-modal__input"
+              formControlName="newPassword"
+              type="password"
+              autocomplete="new-password"
+            />
+          </div>
+          <div class="ep-modal__field">
+            <label class="ep-modal__label" for="ep-confirm">Confirmar nueva contraseña</label>
+            <input
+              id="ep-confirm"
+              class="ep-modal__input"
+              [class.ep-modal__input--error]="passwordMismatch"
+              formControlName="confirmPassword"
+              type="password"
+              autocomplete="new-password"
+            />
+            @if (passwordMismatch) {
+              <span class="ep-modal__field-error">Las contraseñas no coinciden</span>
+            }
+          </div>
+          <button
+            class="ep-modal__submit"
+            type="submit"
+            [disabled]="passwordForm.invalid || loading()"
+          >
+            {{ loading() ? 'Guardando...' : 'Cambiar contraseña' }}
+          </button>
+        </form>
+      }
+
+    </div>
+  </div>
+}

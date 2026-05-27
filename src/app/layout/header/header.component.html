@@ -1,0 +1,128 @@
+<header class="header">
+
+  <a class="header__logo" routerLink="/">
+    <img src="assets/images/enjoyhub.png" alt="enjoyhub" class="header__logo-img" />
+  </a>
+
+  <div class="header__dropdown" [class.header__dropdown--open]="dropdownOpen()">
+    <button class="header__dropdown-name" (click)="toggleDropdown()">
+      <fa-icon [icon]="activeCategoryIcon" class="header__dropdown-icon" />
+      <span>{{ activeCategoryLabel }}</span>
+      <fa-icon [icon]="icons.faChevronDown" class="header__dropdown-arrow" />
+    </button>
+
+    @if (dropdownOpen()) {
+      <ul class="header__dropdown-menu">
+        @for (cat of categories; track cat.id) {
+          <li
+            class="header__dropdown-item"
+            [class.header__dropdown-item--active]="cat.id === activeCategory"
+            (click)="selectCategory(cat)"
+          >
+            <fa-icon [icon]="cat.icon" />
+            <span>{{ cat.label }}</span>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+
+  <nav class="header__actions">
+    <a class="header__action-btn" routerLink="/dashboard" title="Panel de herramientas">
+      <fa-icon [icon]="icons.faList" />
+    </a>
+
+    <div class="header__user" [class.header__user--open]="userMenuOpen()">
+      <button class="header__action-btn" (click)="toggleUserMenu()" title="Mi cuenta">
+        <fa-icon [icon]="currentUserIcon" />
+      </button>
+
+      @if (userMenuOpen()) {
+        <div class="header__user-panel">
+
+          @if (currentUser()) {
+            <div class="header__user-logged">
+              <div class="header__user-top">
+                <p class="header__user-greeting">Hola, <strong>{{ currentUser()!.userName }}</strong></p>
+                <button class="header__user-logout" (click)="onLogout()" title="Cerrar sesión">
+                  <fa-icon [icon]="icons.faRightFromBracket" />
+                </button>
+              </div>
+              <div class="header__user-avatar">
+                <span class="header__user-avatar-label">Tu avatar</span>
+                <div class="header__user-icons">
+                  @for (item of profileIcons; track item.id) {
+                    <button
+                      type="button"
+                      class="header__user-icon-btn"
+                      [class.header__user-icon-btn--selected]="currentUser()!.profileIcon === item.id"
+                      (click)="onSelectIcon(item.id)"
+                      [title]="item.label"
+                    >
+                      <fa-icon [icon]="item.icon" />
+                    </button>
+                  }
+                </div>
+              </div>
+              <div class="header__user-actions">
+                <button class="header__user-action-btn" type="button" (click)="openEditProfile()">
+                  <fa-icon [icon]="icons.faPen" />
+                  Editar perfil
+                </button>
+                <button class="header__user-action-btn" type="button" (click)="openEditPassword()">
+                  <fa-icon [icon]="icons.faKey" />
+                  Cambiar contraseña
+                </button>
+              </div>
+            </div>
+
+          } @else {
+            <form class="header__auth-form" [formGroup]="loginForm" (ngSubmit)="onLogin()">
+              <h3 class="header__auth-title">Iniciar sesión</h3>
+
+              @if (authError()) {
+                <p class="header__auth-error">{{ authError() }}</p>
+              }
+
+              <input
+                class="header__auth-input"
+                formControlName="email"
+                type="email"
+                placeholder="Correo electrónico"
+                autocomplete="email"
+              />
+              <input
+                class="header__auth-input"
+                formControlName="password"
+                type="password"
+                placeholder="Contraseña"
+                autocomplete="current-password"
+              />
+
+              <button
+                class="header__auth-submit"
+                type="submit"
+                [disabled]="loginForm.invalid || authLoading()"
+              >
+                {{ authLoading() ? 'Cargando...' : 'Entrar' }}
+              </button>
+
+              <p class="header__auth-switch">
+                ¿No tienes cuenta?
+                <button
+                  class="header__auth-link"
+                  type="button"
+                  (click)="openRegisterModal()"
+                >
+                  Regístrate aquí
+                </button>
+              </p>
+            </form>
+          }
+
+        </div>
+      }
+    </div>
+  </nav>
+
+</header>

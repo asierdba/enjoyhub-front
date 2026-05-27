@@ -1,0 +1,20 @@
+import { inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
+
+@Injectable({ providedIn: 'root' })
+export class DiscardedService {
+  private http = inject(HttpClient);
+
+  addToDiscarded(userId: number, contentId: number): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${environment.apiUrl}/users/${userId}/discarded/${contentId}`,
+      {}
+    );
+  }
+
+  getDiscardedByUser(userId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiUrl}/users/${userId}/discarded`);
+  }
+}

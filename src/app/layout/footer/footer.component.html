@@ -1,0 +1,82 @@
+<footer class="footer">
+  <div class="footer__content">
+
+    <!-- Columna 1: Marca + RRSS -->
+    <div class="footer__col footer__col--brand">
+      <a routerLink="/" class="footer__logo">
+        <img src="assets/images/enjoyhub.png" alt="enjoyhub" class="footer__logo-img" />
+      </a>
+      <p class="footer__tagline">
+        Tu plataforma para descubrir y organizar todo el entretenimiento que te gusta sin complicaciones.
+      </p>
+      <div class="footer__social">
+        <a href="#" class="footer__social-link" title="Instagram" target="_blank" rel="noopener">
+          <fa-icon [icon]="icons.faInstagram" />
+        </a>
+        <a href="#" class="footer__social-link" title="Twitter / X" target="_blank" rel="noopener">
+          <fa-icon [icon]="icons.faXTwitter" />
+        </a>
+        <a href="#" class="footer__social-link" title="TikTok" target="_blank" rel="noopener">
+          <fa-icon [icon]="icons.faTiktok" />
+        </a>
+      </div>
+    </div>
+
+    <!-- Columna 2: Legal -->
+    <div class="footer__col">
+      <h4 class="footer__col-title">Legal</h4>
+      <ul class="footer__links">
+        <li><a routerLink="/legal/privacidad" class="footer__link">Política de privacidad</a></li>
+        <li><a routerLink="/legal/terminos" class="footer__link">Términos de uso</a></li>
+        <li><a routerLink="/legal/cookies" class="footer__link">Política de cookies</a></li>
+        <li><a routerLink="/legal/aviso" class="footer__link">Aviso legal</a></li>
+      </ul>
+    </div>
+
+    <!-- Columna 3: Contacto -->
+    <div class="footer__col">
+      <h4 class="footer__col-title">Contacto</h4>
+
+      @if (submitted) {
+        <div class="footer__success">
+          ¡Mensaje enviado! Te responderemos pronto.
+        </div>
+      } @else {
+        <form class="footer__form" [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+          <input
+            class="footer__input"
+            formControlName="name"
+            type="text"
+            placeholder="Tu nombre"
+            autocomplete="name"
+          />
+          <input
+            class="footer__input"
+            formControlName="email"
+            type="email"
+            placeholder="Tu email"
+            autocomplete="email"
+          />
+          <textarea
+            class="footer__textarea"
+            formControlName="message"
+            placeholder="Tu mensaje..."
+            rows="3"
+          ></textarea>
+          <button
+            class="footer__submit"
+            type="submit"
+            [disabled]="contactForm.invalid"
+          >
+            Enviar mensaje
+          </button>
+        </form>
+      }
+    </div>
+
+  </div>
+
+  <div class="footer__bottom">
+    <p class="footer__copyright">© {{ year }} enjoyhub. Todos los derechos reservados.</p>
+  </div>
+</footer>
