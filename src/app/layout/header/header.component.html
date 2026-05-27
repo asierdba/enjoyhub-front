@@ -34,7 +34,7 @@
 
     <div class="header__user" [class.header__user--open]="userMenuOpen()">
       <button class="header__action-btn" (click)="toggleUserMenu()" title="Mi cuenta">
-        <fa-icon [icon]="icons.faUser" />
+        <fa-icon [icon]="currentUserIcon" />
       </button>
 
       @if (userMenuOpen()) {
@@ -42,11 +42,38 @@
 
           @if (currentUser()) {
             <div class="header__user-logged">
-              <p class="header__user-greeting">Hola, <strong>{{ currentUser()!.userName }}</strong></p>
-              <button class="header__user-logout" (click)="onLogout()">
-                <fa-icon [icon]="icons.faRightFromBracket" />
-                Cerrar sesión
-              </button>
+              <div class="header__user-top">
+                <p class="header__user-greeting">Hola, <strong>{{ currentUser()!.userName }}</strong></p>
+                <button class="header__user-logout" (click)="onLogout()" title="Cerrar sesión">
+                  <fa-icon [icon]="icons.faRightFromBracket" />
+                </button>
+              </div>
+              <div class="header__user-avatar">
+                <span class="header__user-avatar-label">Tu avatar</span>
+                <div class="header__user-icons">
+                  @for (item of profileIcons; track item.id) {
+                    <button
+                      type="button"
+                      class="header__user-icon-btn"
+                      [class.header__user-icon-btn--selected]="currentUser()!.profileIcon === item.id"
+                      (click)="onSelectIcon(item.id)"
+                      [title]="item.label"
+                    >
+                      <fa-icon [icon]="item.icon" />
+                    </button>
+                  }
+                </div>
+              </div>
+              <div class="header__user-actions">
+                <button class="header__user-action-btn" type="button" (click)="openEditProfile()">
+                  <fa-icon [icon]="icons.faPen" />
+                  Editar perfil
+                </button>
+                <button class="header__user-action-btn" type="button" (click)="openEditPassword()">
+                  <fa-icon [icon]="icons.faKey" />
+                  Cambiar contraseña
+                </button>
+              </div>
             </div>
 
           } @else {
@@ -82,13 +109,13 @@
 
               <p class="header__auth-switch">
                 ¿No tienes cuenta?
-                <a
+                <button
                   class="header__auth-link"
-                  routerLink="/auth/register"
-                  (click)="closeUserMenu()"
+                  type="button"
+                  (click)="openRegisterModal()"
                 >
                   Regístrate aquí
-                </a>
+                </button>
               </p>
             </form>
           }
