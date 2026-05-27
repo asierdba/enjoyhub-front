@@ -1,20 +1,14 @@
 import { Component, inject, signal, HostListener } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { ReactiveFormsModule, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { RegisterModalService } from '../../../core/services/register-modal.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { PROFILE_ICONS } from '../../../core/constants/profile-icons';
-
-function passwordMatchValidator(control: AbstractControl) {
-  const pass    = control.get('password')?.value;
-  const confirm = control.get('confirmPassword')?.value;
-  return pass && confirm && pass !== confirm ? { passwordMismatch: true } : null;
-}
+import { passwordMatchValidator } from '../../../core/validators/password-match.validator';
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, FontAwesomeModule, ReactiveFormsModule],
+  imports: [FontAwesomeModule, ReactiveFormsModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
 })
@@ -33,7 +27,7 @@ export class RegisterComponent {
     password:        ['', [Validators.required, Validators.minLength(6)]],
     confirmPassword: ['', Validators.required],
     profileIcon:     ['1', Validators.required],
-  }, { validators: passwordMatchValidator });
+  }, { validators: passwordMatchValidator('password', 'confirmPassword') });
 
   get passwordMismatch(): boolean {
     return this.form.hasError('passwordMismatch') &&

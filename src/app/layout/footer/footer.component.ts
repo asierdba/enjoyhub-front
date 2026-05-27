@@ -1,5 +1,4 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
@@ -7,7 +6,7 @@ import { faInstagram, faXTwitter, faTiktok } from '@fortawesome/free-brands-svg-
 
 @Component({
   selector: 'app-footer',
-  imports: [CommonModule, RouterLink, FontAwesomeModule, ReactiveFormsModule],
+  imports: [RouterLink, FontAwesomeModule, ReactiveFormsModule],
   templateUrl: './footer.component.html',
   styleUrl: './footer.component.scss',
 })
@@ -15,8 +14,8 @@ export class FooterComponent {
   private fb = inject(FormBuilder);
 
   year = new Date().getFullYear();
-
   icons = { faInstagram, faXTwitter, faTiktok };
+  submitted = signal(false);
 
   contactForm = this.fb.group({
     name:    ['', Validators.required],
@@ -24,11 +23,9 @@ export class FooterComponent {
     message: ['', Validators.required],
   });
 
-  submitted = false;
-
   onSubmit(): void {
     if (this.contactForm.invalid) return;
-    this.submitted = true;
+    this.submitted.set(true);
     this.contactForm.reset();
   }
 }
