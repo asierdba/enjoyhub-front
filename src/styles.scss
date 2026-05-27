@@ -79,4 +79,5 @@ body {
   background-color: var(--black);
   background-image:
     radial-gradient(ellipse 140% 55% at 50% -5%, var(--accent-dark) 0%, transparent 65%);
+  background-attachment: fixed;
 }

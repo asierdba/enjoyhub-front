@@ -28,9 +28,9 @@
   </div>
 
   <nav class="header__actions">
-    <a class="header__action-btn" routerLink="/dashboard" title="Panel de herramientas">
+    <button class="header__action-btn" type="button" (click)="goToDashboard()" title="Mis listas">
       <fa-icon [icon]="icons.faList" />
-    </a>
+    </button>
 
     <div class="header__user" [class.header__user--open]="userMenuOpen()">
       <button class="header__action-btn" (click)="toggleUserMenu()" title="Mi cuenta">

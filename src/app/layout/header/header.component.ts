@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal, HostListener } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
@@ -39,6 +39,7 @@ export class HeaderComponent {
   private authService      = inject(AuthService);
   private registerModal    = inject(RegisterModalService);
   private editProfileModal = inject(EditProfileModalService);
+  private router           = inject(Router);
   private fb               = inject(FormBuilder);
 
   icons = { faList, faUser, faChevronDown, faRightFromBracket, faPen, faKey };
@@ -78,6 +79,14 @@ export class HeaderComponent {
   openRegisterModal(): void {
     this.closeUserMenu();
     this.registerModal.open();
+  }
+
+  goToDashboard(): void {
+    if (this.authService.currentUser()) {
+      this.router.navigate(['/dashboard']);
+    } else {
+      this.registerModal.open();
+    }
   }
 
   toggleDropdown(): void {
@@ -146,5 +155,6 @@ export class HeaderComponent {
   onLogout(): void {
     this.authService.logout();
     this.userMenuOpen.set(false);
+    this.router.navigate(['/']);
   }
 }

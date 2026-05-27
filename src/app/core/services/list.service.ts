@@ -33,4 +33,12 @@ export class ListService {
   deleteItemFromList(listId: number, contentId: number): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(`${environment.apiUrl}/lists/${listId}/items/${contentId}`);
   }
+
+  updateList(listId: number, name: string, description?: string): Observable<UserList> {
+    return this.http.patch<UserList>(`${environment.apiUrl}/lists/${listId}`, { name, description });
+  }
+
+  deleteList(listId: number): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${environment.apiUrl}/lists/${listId}`);
+  }
 }
