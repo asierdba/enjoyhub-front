@@ -3,9 +3,3 @@ export interface ApiResponse<T> {
   message?: string;
   success: boolean;
 }
-
-export interface PaginatedResponse<T> extends ApiResponse<T[]> {
-  total: number;
-  page: number;
-  limit: number;
-}
