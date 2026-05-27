@@ -1,20 +1,14 @@
-import { Component, inject, signal, effect, HostListener } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, effect, inject, signal, HostListener } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { ReactiveFormsModule, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { EditProfileModalService } from '../../../core/services/edit-profile-modal.service';
 import { AuthService } from '../../../core/services/auth.service';
-
-function passwordMatchValidator(control: AbstractControl) {
-  const next    = control.get('newPassword')?.value;
-  const confirm = control.get('confirmPassword')?.value;
-  return next && confirm && next !== confirm ? { passwordMismatch: true } : null;
-}
+import { passwordMatchValidator } from '../../../core/validators/password-match.validator';
 
 @Component({
   selector: 'app-edit-profile-modal',
-  imports: [CommonModule, FontAwesomeModule, ReactiveFormsModule],
+  imports: [FontAwesomeModule, ReactiveFormsModule],
   templateUrl: './edit-profile-modal.component.html',
   styleUrl: './edit-profile-modal.component.scss',
 })
@@ -26,7 +20,6 @@ export class EditProfileModalComponent {
   icons = { faXmark };
 
   loading = signal(false);
-
   error   = signal<string | null>(null);
   success = signal<string | null>(null);
 
@@ -39,7 +32,7 @@ export class EditProfileModalComponent {
     currentPassword: ['', Validators.required],
     newPassword:     ['', [Validators.required, Validators.minLength(6)]],
     confirmPassword: ['', Validators.required],
-  }, { validators: passwordMatchValidator });
+  }, { validators: passwordMatchValidator('newPassword', 'confirmPassword') });
 
   constructor() {
     effect(() => {

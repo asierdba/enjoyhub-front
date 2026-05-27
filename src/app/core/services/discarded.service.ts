@@ -3,6 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
+export interface DiscardedItem {
+  contentId: number;
+  userId: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class DiscardedService {
   private http = inject(HttpClient);
@@ -14,7 +19,7 @@ export class DiscardedService {
     );
   }
 
-  getDiscardedByUser(userId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${environment.apiUrl}/users/${userId}/discarded`);
+  getDiscardedByUser(userId: number): Observable<DiscardedItem[]> {
+    return this.http.get<DiscardedItem[]>(`${environment.apiUrl}/users/${userId}/discarded`);
   }
 }
