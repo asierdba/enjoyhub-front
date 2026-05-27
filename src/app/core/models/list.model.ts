@@ -1,6 +1,6 @@
 export interface UserList {
   listId: number;
   userId: number;
-  name: string;
-  description?: string;
+  listName: string;
+  listDescription?: string;
 }
