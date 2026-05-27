@@ -1,8 +1,8 @@
-import { Component, inject, signal, HostListener } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, computed, inject, signal, HostListener } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import {
   faList,
   faUser,
@@ -25,12 +25,12 @@ import { ContentType } from '../../core/models/content.model';
 interface Category {
   id: ContentType;
   label: string;
-  icon: any;
+  icon: IconDefinition;
 }
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule, RouterLink, FontAwesomeModule, ReactiveFormsModule],
+  imports: [RouterLink, FontAwesomeModule, ReactiveFormsModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
@@ -58,31 +58,26 @@ export class HeaderComponent {
   currentUser  = this.authService.currentUser;
   profileIcons = PROFILE_ICONS;
 
+  readonly activeCategory      = computed(() => this.themeService.activeCategory());
+  readonly activeCategoryLabel = computed(() =>
+    this.categories.find(c => c.id === this.activeCategory())?.label ?? ''
+  );
+  readonly activeCategoryIcon  = computed(() =>
+    this.categories.find(c => c.id === this.activeCategory())?.icon ?? faBook
+  );
+  readonly currentUserIcon     = computed(() => {
+    const icon = this.authService.currentUser()?.profileIcon;
+    return icon ? getProfileIcon(icon) : faUser;
+  });
+
   loginForm = this.fb.group({
     email:    ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
 
-  get activeCategory() {
-    return this.themeService.activeCategory();
-  }
-
-  get currentUserIcon() {
-    const icon = this.authService.currentUser()?.profileIcon;
-    return icon ? getProfileIcon(icon) : faUser;
-  }
-
   openRegisterModal(): void {
     this.closeUserMenu();
     this.registerModal.open();
-  }
-
-  get activeCategoryLabel() {
-    return this.categories.find(c => c.id === this.activeCategory)?.label ?? '';
-  }
-
-  get activeCategoryIcon() {
-    return this.categories.find(c => c.id === this.activeCategory)?.icon;
   }
 
   toggleDropdown(): void {
@@ -108,12 +103,8 @@ export class HeaderComponent {
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent): void {
     const target = event.target as HTMLElement;
-    if (!target.closest('.header__dropdown')) {
-      this.dropdownOpen.set(false);
-    }
-    if (!target.closest('.header__user')) {
-      this.userMenuOpen.set(false);
-    }
+    if (!target.closest('.header__dropdown')) this.dropdownOpen.set(false);
+    if (!target.closest('.header__user'))     this.userMenuOpen.set(false);
   }
 
   onLogin(): void {
@@ -147,7 +138,9 @@ export class HeaderComponent {
   onSelectIcon(iconId: string): void {
     const userId = this.authService.currentUser()?.userId;
     if (!userId) return;
-    this.authService.updateProfileIcon(userId, iconId).subscribe();
+    this.authService.updateProfileIcon(userId, iconId).subscribe({
+      error: () => {},
+    });
   }
 
   onLogout(): void {

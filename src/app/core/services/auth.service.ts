@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { User } from '../models/user.model';
@@ -12,7 +12,10 @@ interface AuthResponse {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private http = inject(HttpClient);
-  currentUser = signal<User | null>(null);
+
+  readonly currentUser = signal<User | null>(null);
+  readonly isLoggedIn  = computed(() => this.currentUser() !== null);
+  readonly isAdmin     = computed(() => this.currentUser()?.role === 'admin');
 
   login(email: string, password: string): Observable<AuthResponse> {
     return this.http
@@ -50,13 +53,5 @@ export class AuthService {
 
   logout(): void {
     this.currentUser.set(null);
-  }
-
-  isLoggedIn(): boolean {
-    return this.currentUser() !== null;
-  }
-
-  isAdmin(): boolean {
-    return this.currentUser()?.role === 'admin';
   }
 }

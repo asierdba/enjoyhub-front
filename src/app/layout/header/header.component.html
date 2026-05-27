@@ -6,8 +6,8 @@
 
   <div class="header__dropdown" [class.header__dropdown--open]="dropdownOpen()">
     <button class="header__dropdown-name" (click)="toggleDropdown()">
-      <fa-icon [icon]="activeCategoryIcon" class="header__dropdown-icon" />
-      <span>{{ activeCategoryLabel }}</span>
+      <fa-icon [icon]="activeCategoryIcon()" class="header__dropdown-icon" />
+      <span>{{ activeCategoryLabel() }}</span>
       <fa-icon [icon]="icons.faChevronDown" class="header__dropdown-arrow" />
     </button>
 
@@ -16,7 +16,7 @@
         @for (cat of categories; track cat.id) {
           <li
             class="header__dropdown-item"
-            [class.header__dropdown-item--active]="cat.id === activeCategory"
+            [class.header__dropdown-item--active]="cat.id === activeCategory()"
             (click)="selectCategory(cat)"
           >
             <fa-icon [icon]="cat.icon" />
@@ -34,7 +34,7 @@
 
     <div class="header__user" [class.header__user--open]="userMenuOpen()">
       <button class="header__action-btn" (click)="toggleUserMenu()" title="Mi cuenta">
-        <fa-icon [icon]="currentUserIcon" />
+        <fa-icon [icon]="currentUserIcon()" />
       </button>
 
       @if (userMenuOpen()) {
