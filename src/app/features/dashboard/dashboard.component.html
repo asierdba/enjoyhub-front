@@ -1,18 +1,17 @@
 @if (activeCategory() !== 'book') {
   <div class="dashboard__wip">
     <fa-icon [icon]="icons.faHammer" class="dashboard__wip-icon" />
-    <p class="dashboard__wip-title">Próximamente</p>
-    <p class="dashboard__wip-text">Esta sección está en desarrollo. ¡Vuelve pronto!</p>
+    <p class="dashboard__wip-title">Coming soon</p>
+    <p class="dashboard__wip-text">This section is under development. Check back soon!</p>
   </div>
 } @else {
 
 <div class="dashboard">
 
-  <!-- ── SIDEBAR ── -->
   <aside class="dashboard__sidebar">
 
     <section class="dashboard__section">
-      <h3 class="dashboard__section-title">Nueva lista</h3>
+      <h3 class="dashboard__section-title">New list</h3>
 
       @if (createError()) {
         <p class="dashboard__create-error">{{ createError() }}</p>
@@ -23,12 +22,12 @@
           class="dashboard__input"
           formControlName="name"
           type="text"
-          placeholder="Nombre de la lista"
+          placeholder="List name"
         />
         <textarea
           class="dashboard__textarea"
           formControlName="description"
-          placeholder="Descripción (opcional)"
+          placeholder="Description (optional)"
           rows="2"
         ></textarea>
         <button
@@ -37,16 +36,16 @@
           [disabled]="createForm.invalid || createLoading()"
         >
           <fa-icon [icon]="icons.faPlus" />
-          {{ createLoading() ? 'Creando...' : 'Crear lista' }}
+          {{ createLoading() ? 'Creating...' : 'Create list' }}
         </button>
       </form>
     </section>
 
     <section class="dashboard__section">
-      <h3 class="dashboard__section-title">Mis listas</h3>
+      <h3 class="dashboard__section-title">My lists</h3>
 
       @if (lists().length === 0) {
-        <p class="dashboard__hint">Aún no tienes listas</p>
+        <p class="dashboard__hint">No lists yet</p>
       } @else {
         <ul class="dashboard__list-selector">
           @for (list of lists(); track list.listId) {
@@ -66,7 +65,7 @@
                 class="dashboard__list-edit"
                 type="button"
                 (click)="openEditModal(list, $event)"
-                title="Editar lista"
+                title="Edit list"
               >
                 <fa-icon [icon]="icons.faPen" />
               </button>
@@ -78,13 +77,12 @@
 
   </aside>
 
-  <!-- ── MAIN ── -->
   <main class="dashboard__main">
 
     @if (!selectedList()) {
       <div class="dashboard__empty">
         <fa-icon [icon]="icons.faLayerGroup" class="dashboard__empty-icon" />
-        <p>Selecciona o crea una lista para ver su contenido</p>
+        <p>Select or create a list to see its content</p>
       </div>
 
     } @else {
@@ -96,7 +94,7 @@
             class="dashboard__main-edit-btn"
             type="button"
             (click)="openEditModal(selectedList()!, $event)"
-            title="Editar lista"
+            title="Edit list"
           >
             <fa-icon [icon]="icons.faPen" />
           </button>
@@ -108,12 +106,12 @@
           [disabled]="deleteLoading()"
         >
           <fa-icon [icon]="icons.faTrash" />
-          {{ deleteLoading() ? 'Eliminando...' : 'Eliminar lista' }}
+          {{ deleteLoading() ? 'Deleting...' : 'Delete list' }}
         </button>
       </div>
 
       @if (listItems().length === 0) {
-        <p class="dashboard__hint">Esta lista no tiene contenido todavía</p>
+        <p class="dashboard__hint">This list has no content yet</p>
       } @else {
         <div class="dashboard__grid">
           @for (item of listItems(); track item.contentId) {
@@ -127,7 +125,7 @@
                 class="dashboard__card-remove"
                 type="button"
                 (click)="removeItem(item.contentId, $event)"
-                title="Quitar de la lista"
+                title="Remove from list"
               >
                 <fa-icon [icon]="icons.faTrash" />
               </button>
@@ -142,9 +140,8 @@
 
 </div>
 
-} <!-- @else book -->
+}
 
-<!-- ── EDIT LIST MODAL ── -->
 @if (editingList()) {
   <div class="list-edit-overlay" (click)="closeEditModal()">
     <div class="list-edit-modal" (click)="$event.stopPropagation()">
@@ -154,13 +151,13 @@
       </button>
 
       <div class="list-edit-modal__header">
-        <h2 class="list-edit-modal__title">Editar lista</h2>
-        <p class="list-edit-modal__subtitle">Cambia el nombre o la descripción</p>
+        <h2 class="list-edit-modal__title">Edit list</h2>
+        <p class="list-edit-modal__subtitle">Change the name or description</p>
       </div>
 
       <form class="list-edit-modal__form" [formGroup]="editForm" (ngSubmit)="submitEdit()">
         <div class="list-edit-modal__field">
-          <label class="list-edit-modal__label" for="edit-name">Nombre</label>
+          <label class="list-edit-modal__label" for="edit-name">Name</label>
           <input
             id="edit-name"
             class="list-edit-modal__input"
@@ -169,12 +166,12 @@
           />
         </div>
         <div class="list-edit-modal__field">
-          <label class="list-edit-modal__label" for="edit-desc">Descripción</label>
+          <label class="list-edit-modal__label" for="edit-desc">Description</label>
           <textarea
             id="edit-desc"
             class="list-edit-modal__textarea"
             formControlName="description"
-            placeholder="Opcional"
+            placeholder="Optional"
             rows="3"
           ></textarea>
         </div>
@@ -183,7 +180,7 @@
           type="submit"
           [disabled]="editForm.invalid || editLoading()"
         >
-          {{ editLoading() ? 'Guardando...' : 'Guardar cambios' }}
+          {{ editLoading() ? 'Saving...' : 'Save changes' }}
         </button>
       </form>
 
@@ -191,7 +188,6 @@
   </div>
 }
 
-<!-- ── CONTENT DETAIL MODAL ── -->
 @if (selectedContent()) {
   <div class="content-modal-overlay" (click)="closeContent()">
     <div class="content-modal" (click)="$event.stopPropagation()">

@@ -61,7 +61,7 @@ export class RegisterComponent {
       },
       error: (err) => {
         this.authLoading.set(false);
-        this.authError.set(err?.error?.message ?? 'Error al crear la cuenta');
+        this.authError.set(err?.error?.message ?? 'Error creating account');
       },
     });
   }

@@ -78,12 +78,12 @@ export class EditProfileModalComponent {
     this.authService.updateProfile(userId, { userName: userName!, email: email! }).subscribe({
       next: () => {
         this.loading.set(false);
-        this.success.set('Perfil actualizado correctamente');
+        this.success.set('Profile updated successfully');
         setTimeout(() => this.close(), 1200);
       },
       error: (err) => {
         this.loading.set(false);
-        this.error.set(err?.error?.message ?? 'Error al actualizar el perfil');
+        this.error.set(err?.error?.message ?? 'Error updating profile');
       },
     });
   }
@@ -98,12 +98,12 @@ export class EditProfileModalComponent {
     this.authService.updatePassword(userId, currentPassword!, newPassword!).subscribe({
       next: () => {
         this.loading.set(false);
-        this.success.set('Contraseña actualizada correctamente');
+        this.success.set('Password updated successfully');
         setTimeout(() => this.close(), 1200);
       },
       error: (err) => {
         this.loading.set(false);
-        this.error.set(err?.error?.message ?? 'Error al cambiar la contraseña');
+        this.error.set(err?.error?.message ?? 'Error changing password');
       },
     });
   }

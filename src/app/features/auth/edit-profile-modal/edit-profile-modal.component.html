@@ -6,11 +6,10 @@
         <fa-icon [icon]="icons.faXmark" />
       </button>
 
-      <!-- EDITAR PERFIL -->
       @if (modalService.mode() === 'profile') {
         <div class="ep-modal__header">
-          <h2 class="ep-modal__title">Editar perfil</h2>
-          <p class="ep-modal__subtitle">Actualiza tu nombre de usuario o correo electrónico</p>
+          <h2 class="ep-modal__title">Edit profile</h2>
+          <p class="ep-modal__subtitle">Update your username or email address</p>
         </div>
 
         @if (error()) {
@@ -22,7 +21,7 @@
 
         <form class="ep-modal__form" [formGroup]="profileForm" (ngSubmit)="submitProfile()">
           <div class="ep-modal__field">
-            <label class="ep-modal__label" for="ep-userName">Nombre de usuario</label>
+            <label class="ep-modal__label" for="ep-userName">Username</label>
             <input
               id="ep-userName"
               class="ep-modal__input"
@@ -32,7 +31,7 @@
             />
           </div>
           <div class="ep-modal__field">
-            <label class="ep-modal__label" for="ep-email">Correo electrónico</label>
+            <label class="ep-modal__label" for="ep-email">Email</label>
             <input
               id="ep-email"
               class="ep-modal__input"
@@ -46,16 +45,15 @@
             type="submit"
             [disabled]="profileForm.invalid || loading()"
           >
-            {{ loading() ? 'Guardando...' : 'Guardar cambios' }}
+            {{ loading() ? 'Saving...' : 'Save changes' }}
           </button>
         </form>
       }
 
-      <!-- CAMBIAR CONTRASEÑA -->
       @if (modalService.mode() === 'password') {
         <div class="ep-modal__header">
-          <h2 class="ep-modal__title">Cambiar contraseña</h2>
-          <p class="ep-modal__subtitle">Introduce tu contraseña actual y la nueva</p>
+          <h2 class="ep-modal__title">Change password</h2>
+          <p class="ep-modal__subtitle">Enter your current password and the new one</p>
         </div>
 
         @if (error()) {
@@ -67,7 +65,7 @@
 
         <form class="ep-modal__form" [formGroup]="passwordForm" (ngSubmit)="submitPassword()">
           <div class="ep-modal__field">
-            <label class="ep-modal__label" for="ep-current">Contraseña actual</label>
+            <label class="ep-modal__label" for="ep-current">Current password</label>
             <input
               id="ep-current"
               class="ep-modal__input"
@@ -77,7 +75,7 @@
             />
           </div>
           <div class="ep-modal__field">
-            <label class="ep-modal__label" for="ep-new">Nueva contraseña</label>
+            <label class="ep-modal__label" for="ep-new">New password</label>
             <input
               id="ep-new"
               class="ep-modal__input"
@@ -87,7 +85,7 @@
             />
           </div>
           <div class="ep-modal__field">
-            <label class="ep-modal__label" for="ep-confirm">Confirmar nueva contraseña</label>
+            <label class="ep-modal__label" for="ep-confirm">Confirm new password</label>
             <input
               id="ep-confirm"
               class="ep-modal__input"
@@ -97,7 +95,7 @@
               autocomplete="new-password"
             />
             @if (passwordMismatch) {
-              <span class="ep-modal__field-error">Las contraseñas no coinciden</span>
+              <span class="ep-modal__field-error">Passwords do not match</span>
             }
           </div>
           <button
@@ -105,7 +103,7 @@
             type="submit"
             [disabled]="passwordForm.invalid || loading()"
           >
-            {{ loading() ? 'Guardando...' : 'Cambiar contraseña' }}
+            {{ loading() ? 'Saving...' : 'Change password' }}
           </button>
         </form>
       }
