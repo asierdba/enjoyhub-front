@@ -126,6 +126,11 @@
     }
   }
 
+  &__error {
+    font-size: 0.75rem;
+    color: #f87171;
+  }
+
   &__submit {
     align-self: flex-start;
     background-color: var(--accent);

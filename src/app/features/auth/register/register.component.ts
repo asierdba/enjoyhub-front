@@ -24,7 +24,7 @@ export class RegisterComponent {
   form = this.fb.group({
     userName:        ['', [Validators.required, Validators.minLength(3)]],
     email:           ['', [Validators.required, Validators.email]],
-    password:        ['', [Validators.required, Validators.minLength(6)]],
+    password:        ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[A-Z])(?=.*[0-9]).*$/)]],
     confirmPassword: ['', Validators.required],
     profileIcon:     ['1', Validators.required],
   }, { validators: passwordMatchValidator('password', 'confirmPassword') });
@@ -33,6 +33,11 @@ export class RegisterComponent {
     return this.form.hasError('passwordMismatch') &&
            !!this.form.get('confirmPassword')?.dirty;
   }
+
+  get pwValue(): string { return this.form.get('password')?.value ?? ''; }
+  get pwHasLength(): boolean { return this.pwValue.length >= 8; }
+  get pwHasUpper(): boolean { return /[A-Z]/.test(this.pwValue); }
+  get pwHasNumber(): boolean { return /[0-9]/.test(this.pwValue); }
 
   selectIcon(id: string): void {
     this.form.patchValue({ profileIcon: id });

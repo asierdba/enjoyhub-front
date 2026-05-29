@@ -63,9 +63,22 @@
             class="register-modal__input"
             formControlName="password"
             type="password"
-            placeholder="Minimum 6 characters"
+            placeholder="Min. 8 chars, 1 uppercase, 1 number"
             autocomplete="new-password"
           />
+          @if (form.get('password')?.dirty) {
+            <div class="register-modal__pw-reqs">
+              <span class="register-modal__pw-req" [class.register-modal__pw-req--ok]="pwHasLength">
+                {{ pwHasLength ? '✓' : '✗' }} At least 8 characters
+              </span>
+              <span class="register-modal__pw-req" [class.register-modal__pw-req--ok]="pwHasUpper">
+                {{ pwHasUpper ? '✓' : '✗' }} At least 1 uppercase letter
+              </span>
+              <span class="register-modal__pw-req" [class.register-modal__pw-req--ok]="pwHasNumber">
+                {{ pwHasNumber ? '✓' : '✗' }} At least 1 number
+              </span>
+            </div>
+          }
         </div>
 
         <div class="register-modal__field">
@@ -93,13 +106,6 @@
         </button>
 
       </form>
-
-      <p class="register-modal__login-link">
-        Already have an account?
-        <button class="register-modal__link" type="button" (click)="close()">
-          Sign in here
-        </button>
-      </p>
 
     </div>
   </div>

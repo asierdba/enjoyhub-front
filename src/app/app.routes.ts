@@ -16,6 +16,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/user-profile/user-profile.component').then(m => m.UserProfileComponent),
   },
   {
+    path: 'legal',
+    loadComponent: () => import('./features/legal/legal.component').then(m => m.LegalComponent),
+  },
+  {
     path: '**',
     redirectTo: '',
   },

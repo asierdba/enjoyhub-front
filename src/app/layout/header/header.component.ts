@@ -48,7 +48,7 @@ export class HeaderComponent {
     { id: 'book',   label: 'Books',       icon: faBook    },
     { id: 'movie',  label: 'Movies',      icon: faFilm    },
     { id: 'series', label: 'Series',      icon: faTv      },
-    { id: 'game',   label: 'Video games', icon: faGamepad },
+    { id: 'game',   label: 'Videogames', icon: faGamepad },
   ];
 
   dropdownOpen = signal(false);
