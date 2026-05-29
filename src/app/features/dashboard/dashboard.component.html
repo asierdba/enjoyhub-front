@@ -1,3 +1,11 @@
+@if (activeCategory() !== 'book') {
+  <div class="dashboard__wip">
+    <fa-icon [icon]="icons.faHammer" class="dashboard__wip-icon" />
+    <p class="dashboard__wip-title">Próximamente</p>
+    <p class="dashboard__wip-text">Esta sección está en desarrollo. ¡Vuelve pronto!</p>
+  </div>
+} @else {
+
 <div class="dashboard">
 
   <!-- ── SIDEBAR ── -->
@@ -133,6 +141,8 @@
   </main>
 
 </div>
+
+} <!-- @else book -->
 
 <!-- ── EDIT LIST MODAL ── -->
 @if (editingList()) {

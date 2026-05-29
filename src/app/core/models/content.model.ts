@@ -1,5 +1,15 @@
 export type ContentType = 'book' | 'movie' | 'series' | 'game';
 
+export interface Author {
+  authorId: number;
+  authorName: string;
+}
+
+export interface Genre {
+  genreId: number;
+  name: string;
+}
+
 export interface Content {
   contentId: number;
   title: string;
@@ -8,4 +18,6 @@ export interface Content {
   image: string;
   type: ContentType;
   emotionId?: number;
+  authors?: Author[];
+  genres?: Genre[];
 }

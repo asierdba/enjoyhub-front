@@ -1,13 +1,14 @@
 import { Component, computed, effect, inject, signal, HostListener } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
-  faTrash, faChevronDown, faList, faCheck, faFaceMeh,
+  faTrash, faChevronDown, faList, faCheck, faFaceMeh, faHammer,
 } from '@fortawesome/free-solid-svg-icons';
 import { EmotionService } from '../../core/services/emotion.service';
 import { ListService } from '../../core/services/list.service';
 import { AuthService } from '../../core/services/auth.service';
 import { DiscardedService } from '../../core/services/discarded.service';
 import { RegisterModalService } from '../../core/services/register-modal.service';
+import { ThemeService } from '../../core/services/theme.service';
 import { Emotion } from '../../core/models/emotion.model';
 import { Content } from '../../core/models/content.model';
 import { UserList } from '../../core/models/list.model';
@@ -26,17 +27,22 @@ export class HomeComponent {
   private authService      = inject(AuthService);
   private discardedService = inject(DiscardedService);
   private registerModal    = inject(RegisterModalService);
+  private themeService     = inject(ThemeService);
 
-  icons = { faTrash, faChevronDown, faList, faCheck, faFaceMeh };
+  activeCategory = this.themeService.activeCategory;
+
+  icons = { faTrash, faChevronDown, faList, faCheck, faFaceMeh, faHammer };
 
   // ── State ──────────────────────────────────────────────────
   emotions         = signal<Emotion[]>([]);
-  selectedEmotion  = signal<Emotion | null>(null);
+  pendingEmotion   = signal<Emotion | null>(null);   // pill highlighted
+  selectedEmotion  = signal<Emotion | null>(null);   // confirmed & loaded
   contents         = signal<Content[]>([]);
   currentIndex     = signal(0);
   userLists        = signal<UserList[]>([]);
   selectedListId   = signal<number | null>(null);
   listItems        = signal<Content[]>([]);
+  discardedIds     = signal<Set<number>>(new Set());
   isDragOver       = signal(false);
   dragging         = signal(false);
   contentsLoading  = signal(false);
@@ -63,7 +69,7 @@ export class HomeComponent {
   constructor() {
     // Fetch emotions (max 20, random)
     this.emotionService.getEmotions().subscribe(list => {
-      this.emotions.set([...list].sort(() => Math.random() - 0.5).slice(0, 20));
+      this.emotions.set(list);
     });
 
     // React to login/logout
@@ -76,10 +82,14 @@ export class HomeComponent {
             this.selectedListId.set(lists[0].listId);
           }
         });
+        this.discardedService.getDiscardedByUser(user.userId).subscribe(items => {
+          this.discardedIds.set(new Set(items.map(i => i.contentId)));
+        });
       } else {
         this.userLists.set([]);
         this.selectedListId.set(null);
         this.listItems.set([]);
+        this.discardedIds.set(new Set());
       }
     });
 
@@ -95,19 +105,36 @@ export class HomeComponent {
   }
 
   // ── Emotion selection ──────────────────────────────────────
-  selectEmotion(emotion: Emotion): void {
-    if (this.selectedEmotion()?.emotionId === emotion.emotionId) return;
+  pickEmotion(emotion: Emotion): void {
+    this.pendingEmotion.set(emotion);
+  }
+
+  confirmEmotion(): void {
+    const emotion = this.pendingEmotion();
+    if (!emotion) return;
     this.selectedEmotion.set(emotion);
+    this.loadContent(emotion);
+  }
+
+  private loadContent(emotion: Emotion): void {
     this.currentIndex.set(0);
     this.contents.set([]);
     this.contentsLoading.set(true);
     this.emotionService.getContentByEmotion(emotion.emotionId).subscribe({
       next: list => {
-        this.contents.set([...list].sort(() => Math.random() - 0.5));
+        this.contents.set(this.filterContent(list));
         this.contentsLoading.set(false);
       },
       error: () => this.contentsLoading.set(false),
     });
+  }
+
+  private filterContent(list: Content[]): Content[] {
+    const discarded = this.discardedIds();
+    const inList    = new Set(this.listItems().map(i => i.contentId));
+    return [...list]
+      .filter(c => !discarded.has(c.contentId) && !inList.has(c.contentId))
+      .sort(() => Math.random() - 0.5);
   }
 
   // ── Card actions ───────────────────────────────────────────
@@ -115,6 +142,7 @@ export class HomeComponent {
     const content = this.currentContent();
     if (!content || this.discardLoading()) return;
     this.discardLoading.set(true);
+    this.discardedIds.update(s => new Set([...s, content.contentId]));
     const advance = () => { this.discardLoading.set(false); this.advance(); };
     const user = this.currentUser();
     if (user) {
@@ -164,7 +192,9 @@ export class HomeComponent {
     event.preventDefault();
     this.dragging.set(false);
     this.isDragOver.set(false);
-    this.doAddToList();
+    if (event.dataTransfer?.getData('text/plain') === 'card') {
+      this.doAddToList();
+    }
   }
 
   // ── Auth ───────────────────────────────────────────────────
@@ -180,10 +210,19 @@ export class HomeComponent {
     return map[type] ?? type;
   }
 
+  authorNames(content: Content): string {
+    return content.authors?.map(a => a.authorName).join(', ') ?? '';
+  }
+
+  genreNames(content: Content): string {
+    return content.genres?.map(g => g.name).join(', ') ?? '';
+  }
+
   private doAddToList(): void {
     const listId  = this.selectedListId();
     const content = this.currentContent();
     if (!listId || !content || this.addLoading()) return;
+    if (this.listItems().some(i => i.contentId === content.contentId)) return;
     this.addLoading.set(true);
     this.listService.addItemToList(listId, content.contentId).subscribe({
       next: () => {

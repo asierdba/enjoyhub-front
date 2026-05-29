@@ -1,148 +1,156 @@
 <div class="home">
 
-  <!-- ── LEFT: Emotions ──────────────────────────────────── -->
-  <aside class="home__emotions">
-    <p class="home__section-label">¿Cómo te sientes?</p>
+  @if (activeCategory() !== 'book') {
+    <div class="home__wip">
+      <fa-icon [icon]="icons.faHammer" class="home__wip-icon" />
+      <p class="home__wip-title">Próximamente</p>
+      <p class="home__wip-text">Esta sección está en desarrollo. ¡Vuelve pronto!</p>
+    </div>
+  } @else {
+
+  <!-- ── STEP 1: Emotions ────────────────────────────────── -->
+  <aside class="home__col">
+    <div class="home__step-header">
+      <span class="home__step-badge home__step-badge--active">1</span>
+      <p class="home__step-title">¿Cómo te sientes?</p>
+    </div>
+
     <div class="home__pills">
       @for (emotion of emotions(); track emotion.emotionId) {
         <button
           class="home__pill"
-          [class.home__pill--active]="selectedEmotion()?.emotionId === emotion.emotionId"
-          (click)="selectEmotion(emotion)"
+          [class.home__pill--active]="pendingEmotion()?.emotionId === emotion.emotionId"
+          (click)="pickEmotion(emotion)"
         >
           {{ emotion.emotionName }}
         </button>
       }
     </div>
+
+    <button
+      class="home__confirm-btn"
+      [disabled]="!pendingEmotion()"
+      (click)="confirmEmotion()"
+    >
+      Descubrir
+    </button>
   </aside>
 
-  <!-- ── CENTER: Content card ────────────────────────────── -->
-  <main class="home__stage">
+  <!-- ── STEP 2: Content card ─────────────────────────────── -->
+  <main class="home__col home__col--center" [class.home__col--inactive]="stageState() === 'idle'">
+    <div class="home__step-header">
+      <span class="home__step-badge" [class.home__step-badge--active]="stageState() !== 'idle'">2</span>
+      <p class="home__step-title">Descubre contenido</p>
+    </div>
 
-    @switch (stageState()) {
+    <div class="home__stage">
+      @switch (stageState()) {
 
-      @case ('idle') {
-        <div class="home__state">
-          <fa-icon [icon]="icons.faFaceMeh" class="home__state-icon" />
-          <p class="home__state-text">Selecciona una emoción para descubrir contenido</p>
-        </div>
-      }
+        @case ('idle') {
+          <div class="home__state">
+            <fa-icon [icon]="icons.faFaceMeh" class="home__state-icon" />
+            <p class="home__state-text">Confirma una emoción para empezar</p>
+          </div>
+        }
 
-      @case ('loading') {
-        <div class="home__card home__card--skeleton">
-          <div class="home__skeleton-pulse"></div>
-        </div>
-      }
+        @case ('loading') {
+          <div class="home__card home__card--skeleton">
+            <div class="home__skeleton-pulse"></div>
+          </div>
+        }
 
-      @case ('empty') {
-        <div class="home__state">
-          <fa-icon [icon]="icons.faFaceMeh" class="home__state-icon" />
-          <p class="home__state-text">No hay contenido disponible para esta emoción</p>
-        </div>
-      }
+        @case ('empty') {
+          <div class="home__state">
+            <fa-icon [icon]="icons.faFaceMeh" class="home__state-icon" />
+            <p class="home__state-text">No hay contenido para esta emoción</p>
+          </div>
+        }
 
-      @case ('exhausted') {
-        <div class="home__state">
-          <fa-icon [icon]="icons.faCheck" class="home__state-icon home__state-icon--accent" />
-          <p class="home__state-text">Has visto todo el contenido disponible</p>
-          <button class="home__state-btn" (click)="selectEmotion(selectedEmotion()!)">
-            Volver a empezar
-          </button>
-        </div>
-      }
+        @case ('exhausted') {
+          <div class="home__state">
+            <fa-icon [icon]="icons.faCheck" class="home__state-icon home__state-icon--accent" />
+            <p class="home__state-text">Has visto todo el contenido disponible</p>
+          </div>
+        }
 
-      @case ('card') {
-        <div class="home__card-wrap">
-          <div
-            class="home__card"
-            draggable="true"
-            [class.home__card--dragging]="dragging()"
-            (dragstart)="onDragStart($event)"
-            (dragend)="onDragEnd()"
-          >
-            @if (currentContent()!.image) {
-              <img
-                class="home__card-img"
-                [src]="currentContent()!.image"
-                [alt]="currentContent()!.title"
-              />
-            } @else {
-              <div class="home__card-no-img"></div>
-            }
-            <div class="home__card-overlay">
-              <span class="home__card-type">{{ typeLabel(currentContent()!.type) }}</span>
-              <h3 class="home__card-title">{{ currentContent()!.title }}</h3>
-              @if (currentContent()!.releaseYear) {
-                <span class="home__card-year">{{ currentContent()!.releaseYear }}</span>
+        @case ('card') {
+          <div class="home__card-wrap">
+
+            <div class="home__card-info">
+              <div class="home__card-meta">
+                <span class="home__card-type">{{ typeLabel(currentContent()!.type) }}</span>
+                <h3 class="home__card-title">{{ currentContent()!.title }}</h3>
+                @if (currentContent()!.authors?.length) {
+                  <span class="home__card-authors">{{ authorNames(currentContent()!) }}</span>
+                }
+                @if (currentContent()!.releaseYear) {
+                  <span class="home__card-year">{{ currentContent()!.releaseYear }}</span>
+                }
+                @if (currentContent()!.genres?.length) {
+                  <span class="home__card-genres">{{ genreNames(currentContent()!) }}</span>
+                }
+              </div>
+              @if (currentContent()!.description) {
+                <p class="home__card-desc">{{ currentContent()!.description }}</p>
+              }
+              <div class="home__card-actions">
+                <button class="home__discard-btn" (click)="discard()" [disabled]="discardLoading()">
+                  <fa-icon [icon]="icons.faTrash" />
+                  Descartar
+                </button>
+              </div>
+            </div>
+
+            <div
+              class="home__card"
+              draggable="true"
+              [class.home__card--dragging]="dragging()"
+              (dragstart)="onDragStart($event)"
+              (dragend)="onDragEnd()"
+            >
+              @if (currentContent()!.image) {
+                <img class="home__card-img" [src]="currentContent()!.image" [alt]="currentContent()!.title" />
+              } @else {
+                <div class="home__card-no-img"></div>
               }
             </div>
+
           </div>
+        }
 
-          @if (currentContent()!.description) {
-            <p class="home__card-desc">{{ currentContent()!.description }}</p>
-          }
-
-          <div class="home__card-actions">
-            <button
-              class="home__discard-btn"
-              (click)="discard()"
-              [disabled]="discardLoading()"
-              title="Descartar"
-            >
-              <fa-icon [icon]="icons.faTrash" />
-              Descartar
-            </button>
-
-            @if (isLoggedIn() && selectedList()) {
-              <span class="home__drag-hint">
-                Arrastra a <strong>{{ selectedList()!.listName }}</strong>
-              </span>
-            } @else if (!isLoggedIn()) {
-              <span class="home__drag-hint home__drag-hint--muted">
-                Inicia sesión para guardar en listas
-              </span>
-            }
-          </div>
-        </div>
       }
-
-    }
-
+    </div>
   </main>
 
-  <!-- ── RIGHT: Lists ────────────────────────────────────── -->
+  <!-- ── STEP 3: Lists ────────────────────────────────────── -->
   <aside
-    class="home__lists"
-    [class.home__lists--drag-over]="isDragOver() && isLoggedIn()"
+    class="home__col home__col--right"
+    [class.home__col--drag-over]="isDragOver() && isLoggedIn()"
     (dragover)="onDragOver($event)"
     (dragleave)="onDragLeave($event)"
     (drop)="onDrop($event)"
   >
+    <div class="home__step-header">
+      <span class="home__step-badge" [class.home__step-badge--active]="stageState() === 'card'">3</span>
+      <p class="home__step-title">Guarda en una lista</p>
+    </div>
 
-    @if (!isLoggedIn()) {
+    <div class="home__col-body">
 
-      <div class="home__lists-guest">
-        <fa-icon [icon]="icons.faList" class="home__lists-guest-icon" />
-        <p>Inicia sesión para guardar contenido en tus listas</p>
-        <button class="home__lists-login-btn" (click)="openRegisterModal()">
-          Iniciar sesión
-        </button>
-      </div>
+      @if (!isLoggedIn()) {
+        <div class="home__lists-guest">
+          <fa-icon [icon]="icons.faList" class="home__lists-guest-icon" />
+          <p>Inicia sesión para guardar contenido en tus listas</p>
+          <button class="home__lists-login-btn" (click)="openRegisterModal()">Iniciar sesión</button>
+        </div>
 
-    } @else {
-
-      <p class="home__section-label">Mis listas</p>
-
-      @if (userLists().length === 0) {
+      } @else if (userLists().length === 0) {
         <p class="home__lists-empty">Aún no tienes listas. Créalas desde el dashboard.</p>
+
       } @else {
 
-        <!-- List selector -->
         <div class="home__list-selector" [class.home__list-selector--open]="listDropdownOpen()">
-          <button
-            class="home__list-selector-btn"
-            (click)="listDropdownOpen.update(v => !v)"
-          >
+          <button class="home__list-selector-btn" (click)="listDropdownOpen.update(v => !v)">
             <span>{{ selectedList()?.listName ?? 'Selecciona una lista' }}</span>
             <fa-icon [icon]="icons.faChevronDown" class="home__list-selector-arrow" />
           </button>
@@ -161,7 +169,6 @@
           }
         </div>
 
-        <!-- Drop zone + list items -->
         <div class="home__drop-zone" [class.home__drop-zone--active]="isDragOver()">
           @if (isDragOver()) {
             <div class="home__drop-hint">
@@ -173,13 +180,13 @@
               Añadido a {{ selectedList()?.listName }}
             </div>
           } @else if (listItems().length === 0) {
-            <p class="home__drop-empty">La lista está vacía.<br>Arrastra una carta aquí.</p>
+            <p class="home__drop-empty">Lista vacía.<br>Arrastra una carta aquí.</p>
           } @else {
             <div class="home__list-grid">
               @for (item of listItems(); track item.contentId) {
                 <div class="home__list-item-card" [title]="item.title">
                   @if (item.image) {
-                    <img [src]="item.image" [alt]="item.title" />
+                    <img draggable="false" [src]="item.image" [alt]="item.title" />
                   } @else {
                     <div class="home__list-item-placeholder"></div>
                   }
@@ -191,8 +198,10 @@
 
       }
 
-    }
+    </div>
 
   </aside>
+
+  } <!-- @else book -->
 
 </div>
