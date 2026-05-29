@@ -100,7 +100,7 @@ export class DashboardComponent {
       },
       error: (err) => {
         this.createLoading.set(false);
-        this.createError.set(err?.error?.message ?? 'Error al crear la lista');
+        this.createError.set(err?.error?.message ?? 'Error creating list');
       },
     });
   }

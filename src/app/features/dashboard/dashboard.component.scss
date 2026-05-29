@@ -42,7 +42,6 @@
   border-radius: 16px;
   overflow: hidden;
 
-  // ── SIDEBAR ──────────────────────────────────────
   &__sidebar {
     width: 280px;
     flex-shrink: 0;
@@ -74,7 +73,6 @@
     color: var(--text-muted);
   }
 
-  // Create form
   &__create-form {
     display: flex;
     flex-direction: column;
@@ -132,7 +130,6 @@
     color: var(--text-muted);
   }
 
-  // List selector
   &__list-selector {
     list-style: none;
     display: flex;
@@ -215,7 +212,6 @@
     }
   }
 
-  // ── MAIN ─────────────────────────────────────────
   &__main {
     flex: 1;
     padding: 1.75rem 2rem;
@@ -302,14 +298,12 @@
     &:disabled { opacity: 0.4; cursor: not-allowed; }
   }
 
-  // Grid
   &__grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
     gap: 0.85rem;
   }
 
-  // Card
   &__card {
     position: relative;
     border-radius: 10px;
@@ -379,7 +373,6 @@
   }
 }
 
-// ── EDIT LIST MODAL ─────────────────────────────────
 .list-edit-overlay {
   position: fixed;
   inset: 0;
@@ -502,7 +495,6 @@
   }
 }
 
-// ── CONTENT DETAIL MODAL ────────────────────────────
 .content-modal-overlay {
   position: fixed;
   inset: 0;

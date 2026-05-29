@@ -5,8 +5,8 @@
       <button class="register-modal__close" type="button" (click)="close()">✕</button>
 
       <div class="register-modal__header">
-        <h2 class="register-modal__title">Crear cuenta</h2>
-        <p class="register-modal__subtitle">Únete y empieza a guardar tu contenido favorito</p>
+        <h2 class="register-modal__title">Create account</h2>
+        <p class="register-modal__subtitle">Join and start saving your favourite content</p>
       </div>
 
       @if (authError()) {
@@ -16,7 +16,7 @@
       <form class="register-modal__form" [formGroup]="form" (ngSubmit)="onSubmit()">
 
         <div class="register-modal__field">
-          <label class="register-modal__label">Elige tu avatar</label>
+          <label class="register-modal__label">Choose your avatar</label>
           <div class="register-modal__icons">
             @for (item of profileIcons; track item.id) {
               <button
@@ -33,54 +33,54 @@
         </div>
 
         <div class="register-modal__field">
-          <label class="register-modal__label" for="reg-userName">Nombre de usuario</label>
+          <label class="register-modal__label" for="reg-userName">Username</label>
           <input
             id="reg-userName"
             class="register-modal__input"
             formControlName="userName"
             type="text"
-            placeholder="Tu nombre de usuario"
+            placeholder="Your username"
             autocomplete="username"
           />
         </div>
 
         <div class="register-modal__field">
-          <label class="register-modal__label" for="reg-email">Correo electrónico</label>
+          <label class="register-modal__label" for="reg-email">Email</label>
           <input
             id="reg-email"
             class="register-modal__input"
             formControlName="email"
             type="email"
-            placeholder="correo@ejemplo.com"
+            placeholder="email@example.com"
             autocomplete="email"
           />
         </div>
 
         <div class="register-modal__field">
-          <label class="register-modal__label" for="reg-password">Contraseña</label>
+          <label class="register-modal__label" for="reg-password">Password</label>
           <input
             id="reg-password"
             class="register-modal__input"
             formControlName="password"
             type="password"
-            placeholder="Mínimo 6 caracteres"
+            placeholder="Minimum 6 characters"
             autocomplete="new-password"
           />
         </div>
 
         <div class="register-modal__field">
-          <label class="register-modal__label" for="reg-confirm">Confirmar contraseña</label>
+          <label class="register-modal__label" for="reg-confirm">Confirm password</label>
           <input
             id="reg-confirm"
             class="register-modal__input"
             [class.register-modal__input--error]="passwordMismatch"
             formControlName="confirmPassword"
             type="password"
-            placeholder="Repite tu contraseña"
+            placeholder="Repeat your password"
             autocomplete="new-password"
           />
           @if (passwordMismatch) {
-            <span class="register-modal__field-error">Las contraseñas no coinciden</span>
+            <span class="register-modal__field-error">Passwords do not match</span>
           }
         </div>
 
@@ -89,15 +89,15 @@
           type="submit"
           [disabled]="form.invalid || authLoading()"
         >
-          {{ authLoading() ? 'Creando cuenta...' : 'Crear cuenta' }}
+          {{ authLoading() ? 'Creating account...' : 'Create account' }}
         </button>
 
       </form>
 
       <p class="register-modal__login-link">
-        ¿Ya tienes cuenta?
+        Already have an account?
         <button class="register-modal__link" type="button" (click)="close()">
-          Inicia sesión aquí
+          Sign in here
         </button>
       </p>
 

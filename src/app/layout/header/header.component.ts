@@ -45,10 +45,10 @@ export class HeaderComponent {
   icons = { faList, faUser, faChevronDown, faRightFromBracket, faPen, faKey };
 
   categories: Category[] = [
-    { id: 'book',   label: 'Libros',      icon: faBook    },
-    { id: 'movie',  label: 'Películas',   icon: faFilm    },
+    { id: 'book',   label: 'Books',       icon: faBook    },
+    { id: 'movie',  label: 'Movies',      icon: faFilm    },
     { id: 'series', label: 'Series',      icon: faTv      },
-    { id: 'game',   label: 'Videojuegos', icon: faGamepad },
+    { id: 'game',   label: 'Video games', icon: faGamepad },
   ];
 
   dropdownOpen = signal(false);
@@ -129,7 +129,7 @@ export class HeaderComponent {
       },
       error: (err) => {
         this.authLoading.set(false);
-        this.authError.set(err?.error?.message ?? 'Credenciales incorrectas');
+        this.authError.set(err?.error?.message ?? 'Incorrect credentials');
       },
     });
   }

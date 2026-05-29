@@ -10,7 +10,6 @@
   gap: 1.5rem;
   align-items: flex-start;
 
-  // ── WIP ───────────────────────────────────────────────────
   &__wip {
     flex: 1;
     display: flex;
@@ -39,7 +38,6 @@
     max-width: 260px;
   }
 
-  // ── Columnas ─────────────────────────────────────────────
   &__col {
     display: flex;
     flex-direction: column;
@@ -72,7 +70,6 @@
     }
   }
 
-  // ── Step header ───────────────────────────────────────────
   &__step-header {
     display: flex;
     align-items: center;
@@ -108,7 +105,6 @@
     color: var(--text-muted);
   }
 
-  // ── LEFT: Emotions ────────────────────────────────────────
   &__pills {
     display: flex;
     flex-wrap: wrap;
@@ -160,7 +156,6 @@
     &:not(:disabled):hover { opacity: 0.85; }
   }
 
-  // ── CENTER: Stage ─────────────────────────────────────────
   &__stage {
     display: flex;
     align-items: center;
@@ -191,7 +186,6 @@
     line-height: 1.5;
   }
 
-  // Card
   &__card-wrap {
     display: flex;
     justify-content: center;
@@ -357,7 +351,6 @@
     gap: 1rem;
   }
 
-  // ── RIGHT: Lists ──────────────────────────────────────────
   &__lists-guest {
     display: flex;
     flex-direction: column;
@@ -397,7 +390,6 @@
     width: 380px;
   }
 
-  // List selector
   &__list-selector {
     position: relative;
     width: 380px;
@@ -458,7 +450,6 @@
     }
   }
 
-  // Drop zone
   &__drop-zone {
     width: 380px;
     flex: 1;

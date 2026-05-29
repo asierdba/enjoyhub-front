@@ -205,7 +205,7 @@ export class HomeComponent {
   // ── Helpers ────────────────────────────────────────────────
   typeLabel(type: string): string {
     const map: Record<string, string> = {
-      book: 'Libro', movie: 'Película', series: 'Serie', game: 'Videojuego',
+      book: 'Book', movie: 'Movie', series: 'Series', game: 'Video game',
     };
     return map[type] ?? type;
   }

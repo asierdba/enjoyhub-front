@@ -3,16 +3,15 @@
   @if (activeCategory() !== 'book') {
     <div class="home__wip">
       <fa-icon [icon]="icons.faHammer" class="home__wip-icon" />
-      <p class="home__wip-title">Próximamente</p>
-      <p class="home__wip-text">Esta sección está en desarrollo. ¡Vuelve pronto!</p>
+      <p class="home__wip-title">Coming soon</p>
+      <p class="home__wip-text">This section is under development. Check back soon!</p>
     </div>
   } @else {
 
-  <!-- ── STEP 1: Emotions ────────────────────────────────── -->
   <aside class="home__col">
     <div class="home__step-header">
       <span class="home__step-badge home__step-badge--active">1</span>
-      <p class="home__step-title">¿Cómo te sientes?</p>
+      <p class="home__step-title">How are you feeling?</p>
     </div>
 
     <div class="home__pills">
@@ -32,15 +31,14 @@
       [disabled]="!pendingEmotion()"
       (click)="confirmEmotion()"
     >
-      Descubrir
+      Discover
     </button>
   </aside>
 
-  <!-- ── STEP 2: Content card ─────────────────────────────── -->
   <main class="home__col home__col--center" [class.home__col--inactive]="stageState() === 'idle'">
     <div class="home__step-header">
       <span class="home__step-badge" [class.home__step-badge--active]="stageState() !== 'idle'">2</span>
-      <p class="home__step-title">Descubre contenido</p>
+      <p class="home__step-title">Discover content</p>
     </div>
 
     <div class="home__stage">
@@ -49,7 +47,7 @@
         @case ('idle') {
           <div class="home__state">
             <fa-icon [icon]="icons.faFaceMeh" class="home__state-icon" />
-            <p class="home__state-text">Confirma una emoción para empezar</p>
+            <p class="home__state-text">Confirm an emotion to get started</p>
           </div>
         }
 
@@ -62,14 +60,14 @@
         @case ('empty') {
           <div class="home__state">
             <fa-icon [icon]="icons.faFaceMeh" class="home__state-icon" />
-            <p class="home__state-text">No hay contenido para esta emoción</p>
+            <p class="home__state-text">No content found for this emotion</p>
           </div>
         }
 
         @case ('exhausted') {
           <div class="home__state">
             <fa-icon [icon]="icons.faCheck" class="home__state-icon home__state-icon--accent" />
-            <p class="home__state-text">Has visto todo el contenido disponible</p>
+            <p class="home__state-text">You've seen all available content</p>
           </div>
         }
 
@@ -96,7 +94,7 @@
               <div class="home__card-actions">
                 <button class="home__discard-btn" (click)="discard()" [disabled]="discardLoading()">
                   <fa-icon [icon]="icons.faTrash" />
-                  Descartar
+                  Discard
                 </button>
               </div>
             </div>
@@ -122,7 +120,6 @@
     </div>
   </main>
 
-  <!-- ── STEP 3: Lists ────────────────────────────────────── -->
   <aside
     class="home__col home__col--right"
     [class.home__col--drag-over]="isDragOver() && isLoggedIn()"
@@ -132,7 +129,7 @@
   >
     <div class="home__step-header">
       <span class="home__step-badge" [class.home__step-badge--active]="stageState() === 'card'">3</span>
-      <p class="home__step-title">Guarda en una lista</p>
+      <p class="home__step-title">Save to a list</p>
     </div>
 
     <div class="home__col-body">
@@ -140,18 +137,18 @@
       @if (!isLoggedIn()) {
         <div class="home__lists-guest">
           <fa-icon [icon]="icons.faList" class="home__lists-guest-icon" />
-          <p>Inicia sesión para guardar contenido en tus listas</p>
-          <button class="home__lists-login-btn" (click)="openRegisterModal()">Iniciar sesión</button>
+          <p>Sign in to save content to your lists</p>
+          <button class="home__lists-login-btn" (click)="openRegisterModal()">Sign in</button>
         </div>
 
       } @else if (userLists().length === 0) {
-        <p class="home__lists-empty">Aún no tienes listas. Créalas desde el dashboard.</p>
+        <p class="home__lists-empty">You don't have any lists yet. Create them from the dashboard.</p>
 
       } @else {
 
         <div class="home__list-selector" [class.home__list-selector--open]="listDropdownOpen()">
           <button class="home__list-selector-btn" (click)="listDropdownOpen.update(v => !v)">
-            <span>{{ selectedList()?.listName ?? 'Selecciona una lista' }}</span>
+            <span>{{ selectedList()?.listName ?? 'Select a list' }}</span>
             <fa-icon [icon]="icons.faChevronDown" class="home__list-selector-arrow" />
           </button>
           @if (listDropdownOpen()) {
@@ -172,15 +169,15 @@
         <div class="home__drop-zone" [class.home__drop-zone--active]="isDragOver()">
           @if (isDragOver()) {
             <div class="home__drop-hint">
-              <span>Suelta para añadir a<br><strong>{{ selectedList()?.listName }}</strong></span>
+              <span>Drop to add to<br><strong>{{ selectedList()?.listName }}</strong></span>
             </div>
           } @else if (addSuccess()) {
             <div class="home__add-success">
               <fa-icon [icon]="icons.faCheck" />
-              Añadido a {{ selectedList()?.listName }}
+              Added to {{ selectedList()?.listName }}
             </div>
           } @else if (listItems().length === 0) {
-            <p class="home__drop-empty">Lista vacía.<br>Arrastra una carta aquí.</p>
+            <p class="home__drop-empty">List empty.<br>Drag a card here.</p>
           } @else {
             <div class="home__list-grid">
               @for (item of listItems(); track item.contentId) {
@@ -202,6 +199,6 @@
 
   </aside>
 
-  } <!-- @else book -->
+  }
 
 </div>

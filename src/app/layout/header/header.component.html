@@ -28,12 +28,12 @@
   </div>
 
   <nav class="header__actions">
-    <button class="header__action-btn" type="button" (click)="goToDashboard()" title="Mis listas">
+    <button class="header__action-btn" type="button" (click)="goToDashboard()" title="My lists">
       <fa-icon [icon]="icons.faList" />
     </button>
 
     <div class="header__user" [class.header__user--open]="userMenuOpen()">
-      <button class="header__action-btn" (click)="toggleUserMenu()" title="Mi cuenta">
+      <button class="header__action-btn" (click)="toggleUserMenu()" title="My account">
         <fa-icon [icon]="currentUserIcon()" />
       </button>
 
@@ -43,13 +43,13 @@
           @if (currentUser()) {
             <div class="header__user-logged">
               <div class="header__user-top">
-                <p class="header__user-greeting">Hola, <strong>{{ currentUser()!.userName }}</strong></p>
-                <button class="header__user-logout" (click)="onLogout()" title="Cerrar sesión">
+                <p class="header__user-greeting">Hello, <strong>{{ currentUser()!.userName }}</strong></p>
+                <button class="header__user-logout" (click)="onLogout()" title="Sign out">
                   <fa-icon [icon]="icons.faRightFromBracket" />
                 </button>
               </div>
               <div class="header__user-avatar">
-                <span class="header__user-avatar-label">Tu avatar</span>
+                <span class="header__user-avatar-label">Your avatar</span>
                 <div class="header__user-icons">
                   @for (item of profileIcons; track item.id) {
                     <button
@@ -67,18 +67,18 @@
               <div class="header__user-actions">
                 <button class="header__user-action-btn" type="button" (click)="openEditProfile()">
                   <fa-icon [icon]="icons.faPen" />
-                  Editar perfil
+                  Edit profile
                 </button>
                 <button class="header__user-action-btn" type="button" (click)="openEditPassword()">
                   <fa-icon [icon]="icons.faKey" />
-                  Cambiar contraseña
+                  Change password
                 </button>
               </div>
             </div>
 
           } @else {
             <form class="header__auth-form" [formGroup]="loginForm" (ngSubmit)="onLogin()">
-              <h3 class="header__auth-title">Iniciar sesión</h3>
+              <h3 class="header__auth-title">Sign in</h3>
 
               @if (authError()) {
                 <p class="header__auth-error">{{ authError() }}</p>
@@ -88,14 +88,14 @@
                 class="header__auth-input"
                 formControlName="email"
                 type="email"
-                placeholder="Correo electrónico"
+                placeholder="Email"
                 autocomplete="email"
               />
               <input
                 class="header__auth-input"
                 formControlName="password"
                 type="password"
-                placeholder="Contraseña"
+                placeholder="Password"
                 autocomplete="current-password"
               />
 
@@ -104,17 +104,17 @@
                 type="submit"
                 [disabled]="loginForm.invalid || authLoading()"
               >
-                {{ authLoading() ? 'Cargando...' : 'Entrar' }}
+                {{ authLoading() ? 'Loading...' : 'Sign in' }}
               </button>
 
               <p class="header__auth-switch">
-                ¿No tienes cuenta?
+                Don't have an account?
                 <button
                   class="header__auth-link"
                   type="button"
                   (click)="openRegisterModal()"
                 >
-                  Regístrate aquí
+                  Register here
                 </button>
               </p>
             </form>
