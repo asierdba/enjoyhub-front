@@ -1,9 +1,10 @@
 import { Component, effect, inject, signal, HostListener } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { faPlus, faTrash, faXmark, faLayerGroup, faPen } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTrash, faXmark, faLayerGroup, faPen, faHammer } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from '../../core/services/auth.service';
 import { ListService } from '../../core/services/list.service';
+import { ThemeService } from '../../core/services/theme.service';
 import { UserList } from '../../core/models/list.model';
 import { Content } from '../../core/models/content.model';
 
@@ -16,9 +17,11 @@ import { Content } from '../../core/models/content.model';
 export class DashboardComponent {
   private authService = inject(AuthService);
   private listService = inject(ListService);
-  private fb          = inject(FormBuilder);
+  private themeService = inject(ThemeService);
+  private fb           = inject(FormBuilder);
 
-  icons = { faPlus, faTrash, faXmark, faLayerGroup, faPen };
+  activeCategory = this.themeService.activeCategory;
+  icons = { faPlus, faTrash, faXmark, faLayerGroup, faPen, faHammer };
 
   lists           = signal<UserList[]>([]);
   selectedList    = signal<UserList | null>(null);
