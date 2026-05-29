@@ -81,8 +81,22 @@
               class="ep-modal__input"
               formControlName="newPassword"
               type="password"
+              placeholder="Min. 8 chars, 1 uppercase, 1 number"
               autocomplete="new-password"
             />
+            @if (passwordForm.get('newPassword')?.dirty) {
+              <div class="ep-modal__pw-reqs">
+                <span class="ep-modal__pw-req" [class.ep-modal__pw-req--ok]="newPwHasLength">
+                  {{ newPwHasLength ? '✓' : '✗' }} At least 8 characters
+                </span>
+                <span class="ep-modal__pw-req" [class.ep-modal__pw-req--ok]="newPwHasUpper">
+                  {{ newPwHasUpper ? '✓' : '✗' }} At least 1 uppercase letter
+                </span>
+                <span class="ep-modal__pw-req" [class.ep-modal__pw-req--ok]="newPwHasNumber">
+                  {{ newPwHasNumber ? '✓' : '✗' }} At least 1 number
+                </span>
+              </div>
+            }
           </div>
           <div class="ep-modal__field">
             <label class="ep-modal__label" for="ep-confirm">Confirm new password</label>

@@ -30,7 +30,7 @@ export class EditProfileModalComponent {
 
   passwordForm = this.fb.group({
     currentPassword: ['', Validators.required],
-    newPassword:     ['', [Validators.required, Validators.minLength(6)]],
+    newPassword:     ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[A-Z])(?=.*[0-9]).*$/)]],
     confirmPassword: ['', Validators.required],
   }, { validators: passwordMatchValidator('newPassword', 'confirmPassword') });
 
@@ -49,6 +49,11 @@ export class EditProfileModalComponent {
     return this.passwordForm.hasError('passwordMismatch') &&
            !!this.passwordForm.get('confirmPassword')?.dirty;
   }
+
+  get newPwValue(): string { return this.passwordForm.get('newPassword')?.value ?? ''; }
+  get newPwHasLength(): boolean { return this.newPwValue.length >= 8; }
+  get newPwHasUpper(): boolean { return /[A-Z]/.test(this.newPwValue); }
+  get newPwHasNumber(): boolean { return /[0-9]/.test(this.newPwValue); }
 
   close(): void {
     this.modalService.close();

@@ -130,6 +130,21 @@
     color: #f87171;
   }
 
+  &__pw-reqs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    margin-top: 0.1rem;
+  }
+
+  &__pw-req {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    transition: color 0.2s;
+
+    &--ok { color: var(--accent); }
+  }
+
   // --- Selección de iconos ---
 
   &__icons {

@@ -24,10 +24,10 @@
     <div class="footer__col">
       <h4 class="footer__col-title">Legal</h4>
       <ul class="footer__links">
-        <li><a routerLink="/legal/privacidad" class="footer__link">Privacy policy</a></li>
-        <li><a routerLink="/legal/terminos" class="footer__link">Terms of use</a></li>
-        <li><a routerLink="/legal/cookies" class="footer__link">Cookie policy</a></li>
-        <li><a routerLink="/legal/aviso" class="footer__link">Legal notice</a></li>
+        <li><a routerLink="/legal" fragment="privacy" class="footer__link">Privacy policy</a></li>
+        <li><a routerLink="/legal" fragment="terms" class="footer__link">Terms of use</a></li>
+        <li><a routerLink="/legal" fragment="cookies" class="footer__link">Cookie policy</a></li>
+        <li><a routerLink="/legal" fragment="notice" class="footer__link">Legal notice</a></li>
       </ul>
     </div>
 
@@ -60,12 +60,15 @@
             placeholder="Your message..."
             rows="3"
           ></textarea>
+          @if (error()) {
+            <p class="footer__error">{{ error() }}</p>
+          }
           <button
             class="footer__submit"
             type="submit"
-            [disabled]="contactForm.invalid"
+            [disabled]="contactForm.invalid || loading()"
           >
-            Send message
+            {{ loading() ? 'Sending...' : 'Send message' }}
           </button>
         </form>
       }

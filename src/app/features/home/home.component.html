@@ -137,12 +137,12 @@
       @if (!isLoggedIn()) {
         <div class="home__lists-guest">
           <fa-icon [icon]="icons.faList" class="home__lists-guest-icon" />
-          <p>Sign in to save content to your lists</p>
-          <button class="home__lists-login-btn" (click)="openRegisterModal()">Sign in</button>
+          <p>Create an account to save content to your lists</p>
+          <button class="home__lists-login-btn" (click)="openRegisterModal()">Register</button>
         </div>
 
       } @else if (userLists().length === 0) {
-        <p class="home__lists-empty">You don't have any lists yet. Create them from the dashboard.</p>
+        <p class="home__lists-empty">You don't have any lists yet. Create them from the panel list.</p>
 
       } @else {
 
