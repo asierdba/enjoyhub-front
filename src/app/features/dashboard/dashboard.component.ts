@@ -177,8 +177,16 @@ export class DashboardComponent {
 
   typeLabel(type: string): string {
     const labels: Record<string, string> = {
-      book: 'Libro', movie: 'Película', series: 'Serie', game: 'Videojuego',
+      book: 'Book', movie: 'Movie', series: 'Series', game: 'Video game',
     };
     return labels[type] ?? type;
+  }
+
+  authorNames(content: Content): string {
+    return content.authors?.map(a => a.authorName).join(', ') ?? '';
+  }
+
+  genreNames(content: Content): string {
+    return content.genres?.map(g => g.name).join(', ') ?? '';
   }
 }

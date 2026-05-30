@@ -87,6 +87,15 @@
                 @if (currentContent()!.genres?.length) {
                   <span class="home__card-genres">{{ genreNames(currentContent()!) }}</span>
                 }
+                @if (currentContent()!.book?.publisher) {
+                  <span class="home__card-book-detail">{{ currentContent()!.book!.publisher }}</span>
+                }
+                @if (currentContent()!.book?.isbn) {
+                  <span class="home__card-book-detail">ISBN · {{ currentContent()!.book!.isbn }}</span>
+                }
+                @if (currentContent()!.book?.pageCount) {
+                  <span class="home__card-book-detail">{{ currentContent()!.book!.pageCount }} pages</span>
+                }
               </div>
               @if (currentContent()!.description) {
                 <p class="home__card-desc">{{ currentContent()!.description }}</p>

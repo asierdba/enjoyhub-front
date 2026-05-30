@@ -32,6 +32,12 @@
       <fa-icon [icon]="icons.faList" />
     </button>
 
+    @if (isAdmin()) {
+      <button class="header__action-btn" type="button" (click)="goToAdmin()" title="Admin panel">
+        <fa-icon [icon]="icons.faShieldHalved" />
+      </button>
+    }
+
     <div class="header__user" [class.header__user--open]="userMenuOpen()">
       <button class="header__action-btn" (click)="toggleUserMenu()" title="My account">
         <fa-icon [icon]="currentUserIcon()" />

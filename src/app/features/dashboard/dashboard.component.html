@@ -196,17 +196,44 @@
         <fa-icon [icon]="icons.faXmark" />
       </button>
 
-      <img
-        class="content-modal__img"
-        [src]="selectedContent()!.image"
-        [alt]="selectedContent()!.title"
-      />
+      <div class="content-modal__inner">
 
-      <div class="content-modal__body">
-        <span class="content-modal__type">{{ typeLabel(selectedContent()!.type) }}</span>
-        <h2 class="content-modal__title">{{ selectedContent()!.title }}</h2>
-        <span class="content-modal__year">{{ selectedContent()!.releaseYear }}</span>
-        <p class="content-modal__desc">{{ selectedContent()!.description }}</p>
+        <div class="content-modal__hero">
+          <div class="content-modal__cover">
+            @if (selectedContent()!.image) {
+              <img [src]="selectedContent()!.image" [alt]="selectedContent()!.title" />
+            }
+          </div>
+
+          <div class="content-modal__meta">
+            <span class="content-modal__type">{{ typeLabel(selectedContent()!.type) }}</span>
+            <h2 class="content-modal__title">{{ selectedContent()!.title }}</h2>
+
+            @if (selectedContent()!.authors?.length) {
+              <span class="content-modal__authors">{{ authorNames(selectedContent()!) }}</span>
+            }
+            @if (selectedContent()!.releaseYear) {
+              <span class="content-modal__detail">{{ selectedContent()!.releaseYear }}</span>
+            }
+            @if (selectedContent()!.genres?.length) {
+              <span class="content-modal__detail">{{ genreNames(selectedContent()!) }}</span>
+            }
+            @if (selectedContent()!.book?.publisher) {
+              <span class="content-modal__detail">{{ selectedContent()!.book!.publisher }}</span>
+            }
+            @if (selectedContent()!.book?.isbn) {
+              <span class="content-modal__detail">ISBN · {{ selectedContent()!.book!.isbn }}</span>
+            }
+            @if (selectedContent()!.book?.pageCount) {
+              <span class="content-modal__detail">{{ selectedContent()!.book!.pageCount }} pages</span>
+            }
+          </div>
+        </div>
+
+        @if (selectedContent()!.description) {
+          <p class="content-modal__desc">{{ selectedContent()!.description }}</p>
+        }
+
       </div>
 
     </div>
