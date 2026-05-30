@@ -13,7 +13,7 @@ import { Emotion } from '../../core/models/emotion.model';
 import { Content } from '../../core/models/content.model';
 import { UserList } from '../../core/models/list.model';
 
-type StageState = 'idle' | 'loading' | 'card' | 'empty' | 'exhausted';
+type StageState = 'loading' | 'card' | 'empty' | 'exhausted';
 
 @Component({
   selector: 'app-home',
@@ -33,10 +33,8 @@ export class HomeComponent {
 
   icons = { faTrash, faChevronDown, faList, faCheck, faFaceMeh, faHammer };
 
-  // ── State ──────────────────────────────────────────────────
   emotions         = signal<Emotion[]>([]);
-  pendingEmotion   = signal<Emotion | null>(null);   // pill highlighted
-  selectedEmotion  = signal<Emotion | null>(null);   // confirmed & loaded
+  pendingEmotion   = signal<Emotion | null>(null);
   contents         = signal<Content[]>([]);
   currentIndex     = signal(0);
   userLists        = signal<UserList[]>([]);
@@ -51,7 +49,6 @@ export class HomeComponent {
   addSuccess       = signal(false);
   listDropdownOpen = signal(false);
 
-  // ── Computed ───────────────────────────────────────────────
   currentUser    = this.authService.currentUser;
   isLoggedIn     = this.authService.isLoggedIn;
   currentContent = computed(() => this.contents()[this.currentIndex()] ?? null);
@@ -59,20 +56,17 @@ export class HomeComponent {
     this.userLists().find(l => l.listId === this.selectedListId()) ?? null
   );
   stageState = computed((): StageState => {
-    if (!this.selectedEmotion())                              return 'idle';
-    if (this.contentsLoading())                              return 'loading';
-    if (this.contents().length === 0)                        return 'empty';
-    if (this.currentIndex() >= this.contents().length)       return 'exhausted';
+    if (this.contentsLoading())                        return 'loading';
+    if (this.contents().length === 0)                  return 'empty';
+    if (this.currentIndex() >= this.contents().length) return 'exhausted';
     return 'card';
   });
 
   constructor() {
-    // Fetch emotions (max 20, random)
-    this.emotionService.getEmotions().subscribe(list => {
-      this.emotions.set(list);
-    });
+    this.emotionService.getEmotions().subscribe(list => this.emotions.set(list));
 
-    // React to login/logout
+    this.loadRandom();
+
     effect(() => {
       const user = this.currentUser();
       if (user) {
@@ -93,7 +87,6 @@ export class HomeComponent {
       }
     });
 
-    // React to list selection
     effect(() => {
       const id = this.selectedListId();
       if (id) {
@@ -104,7 +97,6 @@ export class HomeComponent {
     });
   }
 
-  // ── Emotion selection ──────────────────────────────────────
   pickEmotion(emotion: Emotion): void {
     this.pendingEmotion.set(emotion);
   }
@@ -112,11 +104,23 @@ export class HomeComponent {
   confirmEmotion(): void {
     const emotion = this.pendingEmotion();
     if (!emotion) return;
-    this.selectedEmotion.set(emotion);
-    this.loadContent(emotion);
+    this.loadByEmotion(emotion);
   }
 
-  private loadContent(emotion: Emotion): void {
+  private loadRandom(): void {
+    this.currentIndex.set(0);
+    this.contents.set([]);
+    this.contentsLoading.set(true);
+    this.emotionService.getRandomContent().subscribe({
+      next: list => {
+        this.contents.set(this.filterContent(list));
+        this.contentsLoading.set(false);
+      },
+      error: () => this.contentsLoading.set(false),
+    });
+  }
+
+  private loadByEmotion(emotion: Emotion): void {
     this.currentIndex.set(0);
     this.contents.set([]);
     this.contentsLoading.set(true);
@@ -137,7 +141,6 @@ export class HomeComponent {
       .sort(() => Math.random() - 0.5);
   }
 
-  // ── Card actions ───────────────────────────────────────────
   discard(): void {
     const content = this.currentContent();
     if (!content || this.discardLoading()) return;
@@ -153,7 +156,6 @@ export class HomeComponent {
     }
   }
 
-  // ── List selector ──────────────────────────────────────────
   selectList(id: number): void {
     this.selectedListId.set(id);
     this.listDropdownOpen.set(false);
@@ -165,7 +167,6 @@ export class HomeComponent {
     if (!target.closest('.home__list-selector')) this.listDropdownOpen.set(false);
   }
 
-  // ── Drag & drop ────────────────────────────────────────────
   onDragStart(event: DragEvent): void {
     this.dragging.set(true);
     event.dataTransfer?.setData('text/plain', 'card');
@@ -197,12 +198,10 @@ export class HomeComponent {
     }
   }
 
-  // ── Auth ───────────────────────────────────────────────────
   openRegisterModal(): void {
     this.registerModal.open();
   }
 
-  // ── Helpers ────────────────────────────────────────────────
   typeLabel(type: string): string {
     const map: Record<string, string> = {
       book: 'Book', movie: 'Movie', series: 'Series', game: 'Video game',

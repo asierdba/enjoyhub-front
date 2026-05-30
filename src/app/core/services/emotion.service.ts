@@ -13,6 +13,10 @@ export class EmotionService {
     return this.http.get<Emotion[]>(`${environment.apiUrl}/emotions`);
   }
 
+  getRandomContent(): Observable<Content[]> {
+    return this.http.get<Content[]>(`${environment.apiUrl}/books/random`);
+  }
+
   getContentByEmotion(emotionId: number): Observable<Content[]> {
     return this.http.get<Content[]>(`${environment.apiUrl}/books/by-emotion/${emotionId}`);
   }
