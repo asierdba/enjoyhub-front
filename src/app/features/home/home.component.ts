@@ -9,6 +9,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { DiscardedService } from '../../core/services/discarded.service';
 import { RegisterModalService } from '../../core/services/register-modal.service';
 import { ThemeService } from '../../core/services/theme.service';
+import { ToastService } from '../../core/services/toast.service';
 import { Emotion } from '../../core/models/emotion.model';
 import { Content } from '../../core/models/content.model';
 import { UserList } from '../../core/models/list.model';
@@ -28,6 +29,7 @@ export class HomeComponent {
   private discardedService = inject(DiscardedService);
   private registerModal    = inject(RegisterModalService);
   private themeService     = inject(ThemeService);
+  private toast            = inject(ToastService);
 
   activeCategory = this.themeService.activeCategory;
 
@@ -231,7 +233,10 @@ export class HomeComponent {
         setTimeout(() => this.addSuccess.set(false), 1800);
         this.advance();
       },
-      error: () => this.addLoading.set(false),
+      error: () => {
+        this.addLoading.set(false);
+        this.toast.error('Failed to add to list');
+      },
     });
   }
 

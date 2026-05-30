@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { EditProfileModalService } from '../../../core/services/edit-profile-modal.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { ToastService } from '../../../core/services/toast.service';
 import { passwordMatchValidator } from '../../../core/validators/password-match.validator';
 
 @Component({
@@ -15,6 +16,7 @@ import { passwordMatchValidator } from '../../../core/validators/password-match.
 export class EditProfileModalComponent {
   modalService        = inject(EditProfileModalService);
   private authService = inject(AuthService);
+  private toast       = inject(ToastService);
   private fb          = inject(FormBuilder);
 
   icons = { faXmark };
@@ -83,8 +85,8 @@ export class EditProfileModalComponent {
     this.authService.updateProfile(userId, { userName: userName!, email: email! }).subscribe({
       next: () => {
         this.loading.set(false);
-        this.success.set('Profile updated successfully');
-        setTimeout(() => this.close(), 1200);
+        this.toast.success('Profile updated successfully');
+        this.close();
       },
       error: (err) => {
         this.loading.set(false);
@@ -103,8 +105,8 @@ export class EditProfileModalComponent {
     this.authService.updatePassword(userId, currentPassword!, newPassword!).subscribe({
       next: () => {
         this.loading.set(false);
-        this.success.set('Password updated successfully');
-        setTimeout(() => this.close(), 1200);
+        this.toast.success('Password updated successfully');
+        this.close();
       },
       error: (err) => {
         this.loading.set(false);

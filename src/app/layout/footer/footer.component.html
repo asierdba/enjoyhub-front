@@ -34,11 +34,6 @@
     <div class="footer__col">
       <h4 class="footer__col-title">Contact</h4>
 
-      @if (submitted()) {
-        <div class="footer__success">
-          Message sent! We'll get back to you soon.
-        </div>
-      } @else {
         <form class="footer__form" [formGroup]="contactForm" (ngSubmit)="onSubmit()">
           <input
             class="footer__input"
@@ -60,9 +55,6 @@
             placeholder="Your message..."
             rows="3"
           ></textarea>
-          @if (error()) {
-            <p class="footer__error">{{ error() }}</p>
-          }
           <button
             class="footer__submit"
             type="submit"
@@ -71,7 +63,6 @@
             {{ loading() ? 'Sending...' : 'Send message' }}
           </button>
         </form>
-      }
     </div>
 
   </div>
