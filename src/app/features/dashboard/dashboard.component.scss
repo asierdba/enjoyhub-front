@@ -511,7 +511,10 @@
 .content-modal {
   position: relative;
   width: 100%;
-  max-width: 460px;
+  max-width: 520px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
   background: rgba(15, 15, 15, 0.97);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
@@ -540,22 +543,48 @@
     &:hover { background: rgba(0, 0, 0, 0.85); }
   }
 
-  &__img {
-    width: 100%;
-    max-height: 260px;
-    object-fit: cover;
-    display: block;
-  }
-
-  &__body {
-    padding: 1.25rem 1.5rem 1.5rem;
+  &__inner {
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: 0;
+  }
+
+  &__hero {
+    display: flex;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    padding-right: 3rem;
+  }
+
+  &__cover {
+    flex-shrink: 0;
+    width: 110px;
+    aspect-ratio: 2 / 3;
+    border-radius: 8px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+  }
+
+  &__meta {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding-top: 0.15rem;
   }
 
   &__type {
-    font-size: 0.68rem;
+    font-size: 0.65rem;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -563,23 +592,34 @@
   }
 
   &__title {
-    font-size: 1.15rem;
+    font-size: 1.05rem;
     font-weight: 700;
     color: var(--text);
     line-height: 1.3;
     margin-top: 0.1rem;
   }
 
-  &__year {
+  &__authors {
     font-size: 0.8rem;
+    color: var(--text);
+    font-style: italic;
+    margin-top: 0.1rem;
+  }
+
+  &__detail {
+    font-size: 0.75rem;
     color: var(--text-muted);
+    line-height: 1.4;
   }
 
   &__desc {
     font-size: 0.83rem;
     color: var(--text-muted);
-    line-height: 1.65;
-    margin-top: 0.4rem;
+    line-height: 1.7;
+    padding: 0 1.5rem 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding-top: 1rem;
+    margin-top: 0.25rem;
   }
 }
 

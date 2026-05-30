@@ -10,6 +10,12 @@ export interface Genre {
   name: string;
 }
 
+export interface BookDetail {
+  publisher?: string;
+  isbn?: string;
+  pageCount?: number;
+}
+
 export interface Content {
   contentId: number;
   title: string;
@@ -20,4 +26,5 @@ export interface Content {
   emotionId?: number;
   authors?: Author[];
   genres?: Genre[];
+  book?: BookDetail;
 }

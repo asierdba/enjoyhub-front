@@ -14,6 +14,7 @@ import {
   faRightFromBracket,
   faPen,
   faKey,
+  faShieldHalved,
 } from '@fortawesome/free-solid-svg-icons';
 import { ThemeService } from '../../core/services/theme.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -42,7 +43,9 @@ export class HeaderComponent {
   private router           = inject(Router);
   private fb               = inject(FormBuilder);
 
-  icons = { faList, faUser, faChevronDown, faRightFromBracket, faPen, faKey };
+  icons = { faList, faUser, faChevronDown, faRightFromBracket, faPen, faKey, faShieldHalved };
+
+  isAdmin = this.authService.isAdmin;
 
   categories: Category[] = [
     { id: 'book',   label: 'Books',       icon: faBook    },
@@ -87,6 +90,10 @@ export class HeaderComponent {
     } else {
       this.registerModal.open();
     }
+  }
+
+  goToAdmin(): void {
+    this.router.navigate(['/admin']);
   }
 
   toggleDropdown(): void {

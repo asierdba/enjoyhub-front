@@ -304,6 +304,12 @@
     opacity: 0.75;
   }
 
+  &__card-book-detail {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    opacity: 0.6;
+  }
+
   &__card-desc {
     font-size: 0.8rem;
     color: var(--text-muted);
