@@ -11,7 +11,7 @@
   <aside class="home__col">
     <div class="home__step-header">
       <span class="home__step-badge home__step-badge--active">1</span>
-      <p class="home__step-title">How are you feeling?</p>
+      <p class="home__step-title">Filter by mood</p>
     </div>
 
     <div class="home__pills">
@@ -31,25 +31,18 @@
       [disabled]="!pendingEmotion()"
       (click)="confirmEmotion()"
     >
-      Discover
+      Apply filter
     </button>
   </aside>
 
-  <main class="home__col home__col--center" [class.home__col--inactive]="stageState() === 'idle'">
+  <main class="home__col home__col--center">
     <div class="home__step-header">
-      <span class="home__step-badge" [class.home__step-badge--active]="stageState() !== 'idle'">2</span>
+      <span class="home__step-badge home__step-badge--active">2</span>
       <p class="home__step-title">Discover content</p>
     </div>
 
     <div class="home__stage">
       @switch (stageState()) {
-
-        @case ('idle') {
-          <div class="home__state">
-            <fa-icon [icon]="icons.faFaceMeh" class="home__state-icon" />
-            <p class="home__state-text">Confirm an emotion to get started</p>
-          </div>
-        }
 
         @case ('loading') {
           <div class="home__card home__card--skeleton">
