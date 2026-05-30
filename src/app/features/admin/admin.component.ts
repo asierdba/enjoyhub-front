@@ -5,6 +5,7 @@ import {
   faCloudArrowDown, faUsers, faEnvelope, faXmark, faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { AdminService, AdminUser, ContactMessage, ImportResult } from '../../core/services/admin.service';
+import { ToastService } from '../../core/services/toast.service';
 
 type AdminTab = 'import' | 'users' | 'messages';
 
@@ -16,6 +17,7 @@ type AdminTab = 'import' | 'users' | 'messages';
 })
 export class AdminComponent {
   private adminService = inject(AdminService);
+  private toast        = inject(ToastService);
 
   icons = { faCloudArrowDown, faUsers, faEnvelope, faXmark, faTrash };
 
@@ -23,7 +25,6 @@ export class AdminComponent {
 
   importing    = signal(false);
   importResult = signal<ImportResult | null>(null);
-  importError  = signal<string | null>(null);
 
   users        = signal<AdminUser[]>([]);
   usersLoading = signal(false);
@@ -50,10 +51,20 @@ export class AdminComponent {
   importBooks(): void {
     this.importing.set(true);
     this.importResult.set(null);
-    this.importError.set(null);
     this.adminService.importBooks().subscribe({
-      next: res => { this.importing.set(false); this.importResult.set(res); },
-      error: ()  => { this.importing.set(false); this.importError.set('Import failed. Please try again.'); },
+      next: res => {
+        this.importing.set(false);
+        this.importResult.set(res);
+        if (res.count === 0) {
+          this.toast.error('ERROR — 0 books imported');
+        } else {
+          this.toast.success(`${res.count} book${res.count !== 1 ? 's' : ''} imported successfully`);
+        }
+      },
+      error: () => {
+        this.importing.set(false);
+        this.toast.error('Import failed. Please try again.');
+      },
     });
   }
 
@@ -85,10 +96,11 @@ export class AdminComponent {
         this.users.update(list => list.map(u => u.userId === updated.userId ? updated : u));
         this.editLoading.set(false);
         this.closeUserModal();
+        this.toast.success('User updated');
       },
       error: () => {
         this.editLoading.set(false);
-        this.editError.set('Failed to update user. Please try again.');
+        this.toast.error('Failed to update user');
       },
     });
   }
@@ -105,8 +117,12 @@ export class AdminComponent {
           this.users.update(list => list.map(u => u.userId === user.userId ? updated : u));
         }
         this.deletingListId.set(null);
+        this.toast.success('List deleted');
       },
-      error: () => this.deletingListId.set(null),
+      error: () => {
+        this.deletingListId.set(null);
+        this.toast.error('Failed to delete list');
+      },
     });
   }
 

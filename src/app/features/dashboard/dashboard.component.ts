@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { faPlus, faTrash, faXmark, faLayerGroup, faPen, faHammer } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from '../../core/services/auth.service';
 import { ListService } from '../../core/services/list.service';
+import { ToastService } from '../../core/services/toast.service';
 import { ThemeService } from '../../core/services/theme.service';
 import { UserList } from '../../core/models/list.model';
 import { Content } from '../../core/models/content.model';
@@ -15,9 +16,10 @@ import { Content } from '../../core/models/content.model';
   styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent {
-  private authService = inject(AuthService);
-  private listService = inject(ListService);
+  private authService  = inject(AuthService);
+  private listService  = inject(ListService);
   private themeService = inject(ThemeService);
+  private toast        = inject(ToastService);
   private fb           = inject(FormBuilder);
 
   activeCategory = this.themeService.activeCategory;
@@ -97,10 +99,11 @@ export class DashboardComponent {
         this.createForm.reset();
         this.lists.update(ls => [...ls, list]);
         this.selectedList.set(list);
+        this.toast.success('List created');
       },
       error: (err) => {
         this.createLoading.set(false);
-        this.createError.set(err?.error?.message ?? 'Error creating list');
+        this.toast.error(err?.error?.message ?? 'Error creating list');
       },
     });
   }
@@ -133,8 +136,12 @@ export class DashboardComponent {
           this.selectedList.set(updated);
         }
         this.closeEditModal();
+        this.toast.success('List updated');
       },
-      error: () => this.editLoading.set(false),
+      error: () => {
+        this.editLoading.set(false);
+        this.toast.error('Failed to update list');
+      },
     });
   }
 
@@ -147,8 +154,12 @@ export class DashboardComponent {
         this.deleteLoading.set(false);
         this.lists.update(ls => ls.filter(l => l.listId !== list.listId));
         this.selectedList.set(null);
+        this.toast.success('List deleted');
       },
-      error: () => this.deleteLoading.set(false),
+      error: () => {
+        this.deleteLoading.set(false);
+        this.toast.error('Failed to delete list');
+      },
     });
   }
 
@@ -157,7 +168,10 @@ export class DashboardComponent {
     const listId = this.selectedList()?.listId;
     if (!listId) return;
     this.listService.deleteItemFromList(listId, contentId).subscribe({
-      next: () => this.listItems.update(items => items.filter(i => i.contentId !== contentId)),
+      next: () => {
+        this.listItems.update(items => items.filter(i => i.contentId !== contentId));
+        this.toast.success('Item removed');
+      },
     });
   }
 
