@@ -49,10 +49,13 @@
     color: var(--text-muted);
     font-size: 0.85rem;
     cursor: pointer;
-    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    transition: 0.15s;
     text-align: left;
 
-    fa-icon { font-size: 0.82rem; flex-shrink: 0; }
+    fa-icon { 
+      font-size: 0.82rem; 
+      flex-shrink: 0; 
+    }
 
     &:hover {
       background: rgba(255, 255, 255, 0.05);
@@ -124,8 +127,13 @@
     cursor: pointer;
     transition: opacity 0.2s;
 
-    &:disabled { opacity: 0.4; cursor: not-allowed; }
-    &:not(:disabled):hover { opacity: 0.85; }
+    &:disabled { 
+      opacity: 0.4; cursor: not-allowed;
+    }
+
+    &:not(:disabled):hover { 
+      opacity: 0.85; 
+    }
   }
 
   &__import-result {
@@ -168,7 +176,7 @@
     border: 1px solid rgba(255, 255, 255, 0.07);
     background: rgba(255, 255, 255, 0.02);
     cursor: pointer;
-    transition: background 0.15s, border-color 0.15s;
+    transition: 0.15s;
 
     &:hover {
       background: rgba(255, 255, 255, 0.05);
@@ -231,7 +239,7 @@
     border: 1px solid rgba(255, 255, 255, 0.07);
     background: rgba(255, 255, 255, 0.02);
     cursor: pointer;
-    transition: background 0.15s, border-color 0.15s;
+    transition: 0.15s;
 
     &:hover {
       background: rgba(255, 255, 255, 0.05);
@@ -287,7 +295,6 @@
   border-radius: 16px;
   padding: 2rem;
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.7);
-  animation: adminSlideUp 0.2s ease;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
@@ -309,7 +316,10 @@
     justify-content: center;
     transition: background 0.15s, color 0.15s;
 
-    &:hover { background: rgba(255, 255, 255, 0.08); color: var(--text); }
+    &:hover { 
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text); 
+    }
   }
 
   &__header {
@@ -375,9 +385,13 @@
     outline: none;
     transition: border-color 0.2s;
 
-    &:focus { border-color: var(--accent); }
+    &:focus { 
+      border-color: var(--accent); 
+    }
 
-    option { background: #0f0f0f; }
+    option { 
+      background: #0f0f0f; 
+    }
   }
 
   &__lists-section {
@@ -436,10 +450,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.15s;
+    transition: 0.15s;
 
-    &:hover:not(:disabled) { background: rgba(248, 113, 113, 0.15); }
-    &:disabled { opacity: 0.4; cursor: not-allowed; }
+    &:hover:not(:disabled) {
+      background: rgba(248, 113, 113, 0.15); 
+    }
+    &:disabled { 
+      opacity: 0.4; cursor: not-allowed; 
+    }
   }
 
   &__actions {
@@ -458,9 +476,11 @@
     color: var(--text-muted);
     font-size: 0.85rem;
     cursor: pointer;
-    transition: background 0.15s, color 0.15s;
+    transition: 0.15s;
 
-    &:hover { background: rgba(255, 255, 255, 0.05); color: var(--text); }
+    &:hover { 
+      background: rgba(255, 255, 255, 0.05); color: var(--text);
+    }
   }
 
   &__save {
@@ -474,8 +494,12 @@
     cursor: pointer;
     transition: opacity 0.2s;
 
-    &:disabled { opacity: 0.4; cursor: not-allowed; }
-    &:not(:disabled):hover { opacity: 0.85; }
+    &:disabled { 
+      opacity: 0.4; cursor: not-allowed; 
+    }
+    &:not(:disabled):hover { 
+      opacity: 0.85; 
+    }
   }
 
   &__message-text {
@@ -487,13 +511,12 @@
 }
 
 @keyframes adminFadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-@keyframes adminSlideUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { 
+    opacity: 0; 
+  }
+  to   { 
+    opacity: 1; 
+  }
 }
 
 @media (max-width: 768px) {

@@ -1,4 +1,5 @@
 import { Component, inject, signal, HostListener } from '@angular/core';
+import { NgClass } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { RegisterModalService } from '../../../core/services/register-modal.service';
@@ -8,30 +9,30 @@ import { passwordMatchValidator } from '../../../core/validators/password-match.
 
 @Component({
   selector: 'app-register',
-  imports: [FontAwesomeModule, ReactiveFormsModule],
+  imports: [FontAwesomeModule, ReactiveFormsModule, NgClass],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
 })
 export class RegisterComponent {
-  modalService        = inject(RegisterModalService);
+  modalService = inject(RegisterModalService);
   private authService = inject(AuthService);
-  private fb          = inject(FormBuilder);
+  private fb = inject(FormBuilder);
 
   profileIcons = PROFILE_ICONS;
-  authError    = signal<string | null>(null);
+  authError = signal<string | null>(null);
   authLoading  = signal(false);
 
   form = this.fb.group({
-    userName:        ['', [Validators.required, Validators.minLength(3)]],
-    email:           ['', [Validators.required, Validators.email]],
-    password:        ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[A-Z])(?=.*[0-9]).*$/)]],
+    userName: ['', [Validators.required, Validators.minLength(3)]],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[A-Z])(?=.*[0-9]).*$/)]],
     confirmPassword: ['', Validators.required],
-    profileIcon:     ['1', Validators.required],
+    profileIcon: ['1', Validators.required],
   }, { validators: passwordMatchValidator('password', 'confirmPassword') });
 
   get passwordMismatch(): boolean {
     return this.form.hasError('passwordMismatch') &&
-           !!this.form.get('confirmPassword')?.dirty;
+      !!this.form.get('confirmPassword')?.dirty;
   }
 
   get pwValue(): string { return this.form.get('password')?.value ?? ''; }
@@ -59,6 +60,7 @@ export class RegisterComponent {
     this.authError.set(null);
     this.authLoading.set(true);
     const { userName, email, password, profileIcon } = this.form.value;
+
     this.authService.register(userName!, email!, password!, profileIcon!).subscribe({
       next: () => {
         this.authLoading.set(false);

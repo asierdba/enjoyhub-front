@@ -1,43 +1,43 @@
 import { Component, HostListener, inject, signal } from '@angular/core';
+import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faCloudArrowDown, faUsers, faEnvelope, faXmark, faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { AdminService, AdminUser, ContactMessage, ImportResult } from '../../core/services/admin.service';
-import { ToastService } from '../../core/services/toast.service';
+import { toast } from 'ngx-sonner';
 
 type AdminTab = 'import' | 'users' | 'messages';
 
 @Component({
   selector: 'app-admin',
-  imports: [FontAwesomeModule, FormsModule],
+  imports: [FontAwesomeModule, FormsModule, NgClass],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.scss',
 })
 export class AdminComponent {
   private adminService = inject(AdminService);
-  private toast        = inject(ToastService);
 
   icons = { faCloudArrowDown, faUsers, faEnvelope, faXmark, faTrash };
 
   activeTab = signal<AdminTab>('import');
 
-  importing    = signal(false);
+  importing = signal(false);
   importResult = signal<ImportResult | null>(null);
 
-  users        = signal<AdminUser[]>([]);
+  users = signal<AdminUser[]>([]);
   usersLoading = signal(false);
 
-  messages        = signal<ContactMessage[]>([]);
+  messages = signal<ContactMessage[]>([]);
   messagesLoading = signal(false);
 
-  selectedUser   = signal<AdminUser | null>(null);
-  editUserName   = signal('');
-  editEmail      = signal('');
-  editRole       = signal<string>('user');
-  editLoading    = signal(false);
-  editError      = signal<string | null>(null);
+  selectedUser = signal<AdminUser | null>(null);
+  editUserName = signal('');
+  editEmail = signal('');
+  editRole = signal<string>('user');
+  editLoading = signal(false);
+  editError = signal<string | null>(null);
   deletingListId = signal<number | null>(null);
 
   selectedMessage = signal<ContactMessage | null>(null);
@@ -56,14 +56,14 @@ export class AdminComponent {
         this.importing.set(false);
         this.importResult.set(res);
         if (res.count === 0) {
-          this.toast.error('ERROR — 0 books imported');
+          toast.error('ERROR — 0 books imported');
         } else {
-          this.toast.success(`${res.count} book${res.count !== 1 ? 's' : ''} imported successfully`);
+          toast.success(`${res.count} book${res.count !== 1 ? 's' : ''} imported successfully`);
         }
       },
       error: () => {
         this.importing.set(false);
-        this.toast.error('Import failed. Please try again.');
+        toast.error('Import failed. Please try again.');
       },
     });
   }
@@ -96,11 +96,11 @@ export class AdminComponent {
         this.users.update(list => list.map(u => u.userId === updated.userId ? updated : u));
         this.editLoading.set(false);
         this.closeUserModal();
-        this.toast.success('User updated');
+        toast.success('User updated');
       },
       error: () => {
         this.editLoading.set(false);
-        this.toast.error('Failed to update user');
+        toast.error('Failed to update user');
       },
     });
   }
@@ -117,11 +117,11 @@ export class AdminComponent {
           this.users.update(list => list.map(u => u.userId === user.userId ? updated : u));
         }
         this.deletingListId.set(null);
-        this.toast.success('List deleted');
+        toast.success('List deleted');
       },
       error: () => {
         this.deletingListId.set(null);
-        this.toast.error('Failed to delete list');
+        toast.error('Failed to delete list');
       },
     });
   }

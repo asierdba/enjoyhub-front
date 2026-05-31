@@ -12,8 +12,8 @@ export interface DiscardedItem {
 export class DiscardedService {
   private http = inject(HttpClient);
 
-  addToDiscarded(userId: number, contentId: number): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(
+  addToDiscarded(userId: number, contentId: number): Observable<any> {
+    return this.http.post<any>(
       `${environment.apiUrl}/users/${userId}/discarded/${contentId}`,
       {}
     );

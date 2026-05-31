@@ -4,7 +4,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { faInstagram, faXTwitter, faTiktok } from '@fortawesome/free-brands-svg-icons';
 import { ContactService } from '../../core/services/contact.service';
-import { ToastService } from '../../core/services/toast.service';
+import { toast } from 'ngx-sonner';
 
 @Component({
   selector: 'app-footer',
@@ -13,33 +13,36 @@ import { ToastService } from '../../core/services/toast.service';
   styleUrl: './footer.component.scss',
 })
 export class FooterComponent {
-  private fb             = inject(FormBuilder);
+  private fb = inject(FormBuilder);
   private contactService = inject(ContactService);
-  private toast          = inject(ToastService);
 
-  year    = new Date().getFullYear();
-  icons   = { faInstagram, faXTwitter, faTiktok };
+  year = new Date().getFullYear();
+  icons = { faInstagram, faXTwitter, faTiktok };
   loading = signal(false);
 
   contactForm = this.fb.group({
-    name:    ['', Validators.required],
-    email:   ['', [Validators.required, Validators.email]],
+    name: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
     message: ['', Validators.required],
   });
 
   onSubmit(): void {
-    if (this.contactForm.invalid || this.loading()) return;
+    if (this.contactForm.invalid || this.loading()) {
+      return;
+    } 
+
     this.loading.set(true);
     const { name, email, message } = this.contactForm.value;
+
     this.contactService.send(name!, email!, message!).subscribe({
       next: () => {
         this.loading.set(false);
         this.contactForm.reset();
-        this.toast.success("Message sent! We'll get back to you soon.");
+        toast.success("Message sent! We'll get back to you soon.");
       },
       error: () => {
         this.loading.set(false);
-        this.toast.error('Could not send your message. Please try again.');
+        toast.error('Could not send your message. Please try again.');
       },
     });
   }

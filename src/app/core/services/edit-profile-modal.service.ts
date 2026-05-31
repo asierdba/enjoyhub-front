@@ -6,7 +6,7 @@ export type EditProfileMode = 'profile' | 'password';
 export class EditProfileModalService {
   mode = signal<EditProfileMode | null>(null);
 
-  openProfile():  void { this.mode.set('profile');  }
+  openProfile(): void { this.mode.set('profile');  }
   openPassword(): void { this.mode.set('password'); }
-  close():        void { this.mode.set(null);        }
+  close(): void { this.mode.set(null);        }
 }

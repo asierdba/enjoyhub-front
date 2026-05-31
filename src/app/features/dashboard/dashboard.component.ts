@@ -1,48 +1,48 @@
 import { Component, effect, inject, signal, HostListener } from '@angular/core';
+import { NgClass } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { faPlus, faTrash, faXmark, faLayerGroup, faPen, faHammer } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from '../../core/services/auth.service';
 import { ListService } from '../../core/services/list.service';
-import { ToastService } from '../../core/services/toast.service';
 import { ThemeService } from '../../core/services/theme.service';
+import { toast } from 'ngx-sonner';
 import { UserList } from '../../core/models/list.model';
 import { Content } from '../../core/models/content.model';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [FontAwesomeModule, ReactiveFormsModule],
+  imports: [FontAwesomeModule, ReactiveFormsModule, NgClass],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent {
-  private authService  = inject(AuthService);
-  private listService  = inject(ListService);
+  private authService = inject(AuthService);
+  private listService = inject(ListService);
   private themeService = inject(ThemeService);
-  private toast        = inject(ToastService);
-  private fb           = inject(FormBuilder);
+  private fb = inject(FormBuilder);
 
   activeCategory = this.themeService.activeCategory;
   icons = { faPlus, faTrash, faXmark, faLayerGroup, faPen, faHammer };
 
-  lists           = signal<UserList[]>([]);
-  selectedList    = signal<UserList | null>(null);
-  listItems       = signal<Content[]>([]);
+  lists = signal<UserList[]>([]);
+  selectedList = signal<UserList | null>(null);
+  listItems = signal<Content[]>([]);
   selectedContent = signal<Content | null>(null);
-  editingList     = signal<UserList | null>(null);
+  editingList = signal<UserList | null>(null);
 
   createLoading = signal(false);
-  createError   = signal<string | null>(null);
+  createError = signal<string | null>(null);
   deleteLoading = signal(false);
-  editLoading   = signal(false);
+  editLoading = signal(false);
 
   createForm = this.fb.group({
-    name:        ['', Validators.required],
+    name: ['', Validators.required],
     description: [''],
   });
 
   editForm = this.fb.group({
-    name:        ['', Validators.required],
+    name: ['', Validators.required],
     description: [''],
   });
 
@@ -51,6 +51,7 @@ export class DashboardComponent {
       const user = this.authService.currentUser();
       if (user) {
         this.loadLists(user.userId);
+
       } else {
         this.lists.set([]);
         this.selectedList.set(null);
@@ -99,11 +100,11 @@ export class DashboardComponent {
         this.createForm.reset();
         this.lists.update(ls => [...ls, list]);
         this.selectedList.set(list);
-        this.toast.success('List created');
+        toast.success('List created');
       },
       error: (err) => {
         this.createLoading.set(false);
-        this.toast.error(err?.error?.message ?? 'Error creating list');
+        toast.error(err?.error?.message ?? 'Error creating list');
       },
     });
   }
@@ -136,11 +137,11 @@ export class DashboardComponent {
           this.selectedList.set(updated);
         }
         this.closeEditModal();
-        this.toast.success('List updated');
+        toast.success('List updated');
       },
       error: () => {
         this.editLoading.set(false);
-        this.toast.error('Failed to update list');
+        toast.error('Failed to update list');
       },
     });
   }
@@ -154,11 +155,11 @@ export class DashboardComponent {
         this.deleteLoading.set(false);
         this.lists.update(ls => ls.filter(l => l.listId !== list.listId));
         this.selectedList.set(null);
-        this.toast.success('List deleted');
+        toast.success('List deleted');
       },
       error: () => {
         this.deleteLoading.set(false);
-        this.toast.error('Failed to delete list');
+        toast.error('Failed to delete list');
       },
     });
   }
@@ -170,7 +171,7 @@ export class DashboardComponent {
     this.listService.deleteItemFromList(listId, contentId).subscribe({
       next: () => {
         this.listItems.update(items => items.filter(i => i.contentId !== contentId));
-        this.toast.success('Item removed');
+        toast.success('Item removed');
       },
     });
   }
@@ -185,8 +186,13 @@ export class DashboardComponent {
 
   @HostListener('document:keydown.escape')
   onEscape(): void {
-    if (this.selectedContent()) { this.closeContent(); return; }
-    if (this.editingList())     { this.closeEditModal(); }
+    if (this.selectedContent()) { 
+      this.closeContent(); return; 
+    }
+
+    if (this.editingList()) { 
+      this.closeEditModal(); 
+    }
   }
 
   typeLabel(type: string): string {

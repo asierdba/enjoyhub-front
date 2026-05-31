@@ -7,10 +7,7 @@ import { environment } from '../../../environments/environment';
 export class ContactService {
   private http = inject(HttpClient);
 
-  send(name: string, email: string, message: string): Observable<{ message: string; id: number }> {
-    return this.http.post<{ message: string; id: number }>(
-      `${environment.apiUrl}/contact`,
-      { name, email, message }
-    );
+  send(name: string, email: string, message: string): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/contact`,{ name, email, message });
   }
 }
