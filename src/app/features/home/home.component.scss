@@ -543,3 +543,89 @@
   0%   { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
+
+@media (max-width: 768px) {
+  :host {
+    padding: 1rem 1rem 1.25rem;
+  }
+
+  .home {
+    flex-direction: column;
+    gap: 0.85rem;
+
+    &__col--center {
+      min-height: auto;
+      order: 1;
+    }
+
+    &__col--right {
+      max-height: none;
+      overflow: visible;
+      order: 2;
+    }
+
+    &__col-body {
+      min-height: 0;
+    }
+
+    &__card-wrap {
+      flex-direction: column-reverse;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    &__card {
+      width: 180px;
+    }
+
+    &__card-info {
+      flex: none;
+      width: 100%;
+      align-items: center;
+      text-align: center;
+    }
+
+    &__card-actions {
+      align-items: center;
+    }
+
+    &__card-desc {
+      text-align: center;
+      -webkit-line-clamp: 4;
+    }
+
+    &__pills {
+      width: 100%;
+    }
+
+    &__lists-guest,
+    &__lists-empty {
+      width: 100%;
+    }
+
+    &__list-selector,
+    &__drop-zone {
+      width: 100%;
+    }
+
+    &__drop-zone {
+      min-height: 120px;
+    }
+
+    &__list-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .home {
+    &__card {
+      width: 150px;
+    }
+
+    &__list-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+}
