@@ -273,6 +273,20 @@
     }
   }
 
+  @media (max-width: 768px) {
+    padding: 0 1rem;
+
+    &__dropdown-name {
+      font-size: 0.9rem;
+      padding: 0.4rem 0.6rem;
+    }
+
+    &__user-panel {
+      width: calc(100vw - 2rem);
+      right: -0.5rem;
+    }
+  }
+
   &__auth {
     &-form {
       display: flex;
