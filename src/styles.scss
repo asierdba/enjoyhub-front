@@ -1,3 +1,69 @@
+:root {
+  --accent: #CBF23D;
+  --accent-dark: #012604;
+  --accent-muted: rgba(203, 242, 61, 0.12);
+}
+
+[data-theme="book"] {
+  --accent: #CBF23D;
+  --accent-dark: #012604;
+  --accent-muted: rgba(203, 242, 61, 0.12);
+}
+
+[data-theme="movie"] {
+  --accent: #F23D3D;
+  --accent-dark: #260101;
+  --accent-muted: rgba(242, 61, 61, 0.12);
+}
+
+[data-theme="series"] {
+  --accent: #3DF2E4;
+  --accent-dark: #012626;
+  --accent-muted: rgba(61, 242, 228, 0.12);
+}
+
+[data-theme="game"] {
+  --accent: #F2E43D;
+  --accent-dark: #533405;
+  --accent-muted: rgba(242, 228, 61, 0.12);
+}
+
+:root {
+  --white: #FFFFFF;
+  --gray-light: #F2F2F2;
+  --gray-dark: #262626;
+  --black: #000000;
+  --text: #FFFFFF;
+  --text-muted: rgba(255, 255, 255, 0.5);
+}
+
+html {
+  transition:
+    --accent 0.5s ease,
+    --accent-dark 0.5s ease;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'M PLUS Rounded 1c', 'Segoe UI', system-ui, sans-serif;
+  font-size: 16px;
+  color: var(--text);
+}
+
+app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--black);
+  background-image:
+    radial-gradient(ellipse 140% 55% at 50% -5%, var(--accent-dark) 0%, transparent 65%);
+  background-attachment: fixed;
+}
+
 @property --accent {
   syntax: '<color>';
   initial-value: #CBF23D;
@@ -21,63 +87,35 @@ button, input, select, textarea {
   font-size: inherit;
 }
 
-:root, [data-theme="book"] {
-  --accent:       #CBF23D;
-  --accent-dark:  #012604;
-  --accent-muted: rgba(203, 242, 61, 0.12);
+[data-sonner-toaster] {
+  font-family: 'M PLUS Rounded 1c', system-ui, sans-serif;
 }
 
-[data-theme="movie"] {
-  --accent:       #F23D3D;
-  --accent-dark:  #260101;
-  --accent-muted: rgba(242, 61, 61, 0.12);
+[data-sonner-toaster][data-theme='dark'] {
+  --normal-bg: rgba(18, 18, 18, 0.97);
+  --normal-border: rgba(255, 255, 255, 0.1);
+  --normal-text: var(--text);
 }
 
-[data-theme="series"] {
-  --accent:       #3DF2E4;
-  --accent-dark:  #012626;
-  --accent-muted: rgba(61, 242, 228, 0.12);
+[data-sonner-toast] {
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
 }
 
-[data-theme="game"] {
-  --accent:       #F2E43D;
-  --accent-dark:  #533405;
-  --accent-muted: rgba(242, 228, 61, 0.12);
+[data-sonner-toast][data-type='success'] {
+  --success-bg: rgba(18, 18, 18, 0.97);
+  --success-border: color-mix(in srgb, var(--accent) 40%, transparent);
+  --success-text: var(--accent);
 }
 
-:root {
-  --white:      #FFFFFF;
-  --gray-light: #F2F2F2;
-  --gray-dark:  #262626;
-  --black:      #000000;
-  --text:       #FFFFFF;
-  --text-muted: rgba(255, 255, 255, 0.5);
+[data-sonner-toast][data-type='error'] {
+  --error-bg: rgba(18, 18, 18, 0.97);
+  --error-border: rgba(248, 113, 113, 0.4);
+  --error-text: #fca5a5;
 }
 
-html {
-  transition:
-    --accent 0.5s ease,
-    --accent-dark 0.5s ease;
-}
-
-html, body {
-  height: 100%;
-  font-family: 'M PLUS Rounded 1c', 'Segoe UI', system-ui, sans-serif;
-  font-size: 16px;
-  -webkit-font-smoothing: antialiased;
-  color: var(--text);
-}
-
-app-root {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-body {
-  min-height: 100vh;
-  background-color: var(--black);
-  background-image:
-    radial-gradient(ellipse 140% 55% at 50% -5%, var(--accent-dark) 0%, transparent 65%);
-  background-attachment: fixed;
+[data-sonner-toast][data-type='info'] {
+  --info-bg: rgba(18, 18, 18, 0.97);
+  --info-border: rgba(255, 255, 255, 0.12);
+  --info-text: var(--text);
 }

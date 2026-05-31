@@ -20,7 +20,6 @@
   border-radius: 16px;
   padding: 2rem;
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.7);
-  animation: slideUp 0.2s ease;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
@@ -42,7 +41,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 6px;
-    transition: background-color 0.15s ease, color 0.15s ease;
+    transition: 0.15s ease;
 
     &:hover {
       background-color: rgba(255, 255, 255, 0.08);
@@ -106,12 +105,18 @@
     outline: none;
     transition: border-color 0.2s ease;
 
-    &::placeholder { color: var(--text-muted); }
-    &:focus        { border-color: var(--accent); }
+    &::placeholder { 
+      color: var(--text-muted); 
+    }
+    &:focus { 
+      border-color: var(--accent); 
+    }
 
     &--error {
       border-color: #f87171;
-      &:focus { border-color: #f87171; }
+      &:focus { 
+        border-color: #f87171; 
+      }
     }
 
     &[type="password"] {
@@ -145,8 +150,6 @@
     &--ok { color: var(--accent); }
   }
 
-  // --- Selección de iconos ---
-
   &__icons {
     display: flex;
     gap: 0.5rem;
@@ -165,7 +168,7 @@
     border-radius: 10px;
     color: var(--text-muted);
     cursor: pointer;
-    transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+    transition: 0.15s ease;
 
     &:hover {
       border-color: rgba(255, 255, 255, 0.25);
@@ -178,8 +181,6 @@
       background-color: var(--accent-muted);
     }
   }
-
-  // --- Botón submit ---
 
   &__submit {
     width: 100%;
@@ -199,7 +200,9 @@
       cursor: not-allowed;
     }
 
-    &:not(:disabled):hover { opacity: 0.85; }
+    &:not(:disabled):hover { 
+      opacity: 0.85; 
+    }
   }
 
   &__login-link {
@@ -222,14 +225,14 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from { 
+    opacity: 0; 
+  }
+  to {
+    opacity: 1; 
+  }
 }
 
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0);    }
-}
 
 @media (max-width: 768px) {
   .register-overlay {

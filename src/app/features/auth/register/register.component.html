@@ -22,7 +22,7 @@
               <button
                 type="button"
                 class="register-modal__icon-btn"
-                [class.register-modal__icon-btn--selected]="form.value.profileIcon === item.id"
+                [ngClass]="{ 'register-modal__icon-btn--selected': form.value.profileIcon === item.id }"
                 (click)="selectIcon(item.id)"
                 [title]="item.label"
               >
@@ -40,7 +40,6 @@
             formControlName="userName"
             type="text"
             placeholder="Your username"
-            autocomplete="username"
           />
         </div>
 
@@ -52,7 +51,6 @@
             formControlName="email"
             type="email"
             placeholder="email@example.com"
-            autocomplete="email"
           />
         </div>
 
@@ -64,17 +62,16 @@
             formControlName="password"
             type="password"
             placeholder="Your password"
-            autocomplete="new-password"
           />
           @if (form.get('password')?.dirty) {
             <div class="register-modal__pw-reqs">
-              <span class="register-modal__pw-req" [class.register-modal__pw-req--ok]="pwHasLength">
+              <span class="register-modal__pw-req" [ngClass]="{ 'register-modal__pw-req--ok': pwHasLength }">
                 {{ pwHasLength ? '✓' : '✗' }} At least 8 characters
               </span>
-              <span class="register-modal__pw-req" [class.register-modal__pw-req--ok]="pwHasUpper">
+              <span class="register-modal__pw-req" [ngClass]="{ 'register-modal__pw-req--ok': pwHasUpper }">
                 {{ pwHasUpper ? '✓' : '✗' }} At least 1 uppercase letter
               </span>
-              <span class="register-modal__pw-req" [class.register-modal__pw-req--ok]="pwHasNumber">
+              <span class="register-modal__pw-req" [ngClass]="{ 'register-modal__pw-req--ok': pwHasNumber }">
                 {{ pwHasNumber ? '✓' : '✗' }} At least 1 number
               </span>
             </div>
@@ -86,11 +83,10 @@
           <input
             id="reg-confirm"
             class="register-modal__input"
-            [class.register-modal__input--error]="passwordMismatch"
+            [ngClass]="{ 'register-modal__input--error': passwordMismatch }"
             formControlName="confirmPassword"
             type="password"
             placeholder="Repeat your password"
-            autocomplete="new-password"
           />
           @if (passwordMismatch) {
             <span class="register-modal__field-error">Passwords do not match</span>

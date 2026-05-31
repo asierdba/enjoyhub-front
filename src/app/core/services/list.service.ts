@@ -5,11 +5,6 @@ import { UserList } from '../models/list.model';
 import { Content } from '../models/content.model';
 import { environment } from '../../../environments/environment';
 
-interface ListItemResponse {
-  listId: number;
-  contentId: number;
-}
-
 @Injectable({ providedIn: 'root' })
 export class ListService {
   private http = inject(HttpClient);
@@ -26,8 +21,8 @@ export class ListService {
     return this.http.get<Content[]>(`${environment.apiUrl}/lists/${listId}/items`);
   }
 
-  addItemToList(listId: number, contentId: number): Observable<ListItemResponse> {
-    return this.http.post<ListItemResponse>(`${environment.apiUrl}/lists/${listId}/items`, { contentId });
+  addItemToList(listId: number, contentId: number): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/lists/${listId}/items`, { contentId });
   }
 
   deleteItemFromList(listId: number, contentId: number): Observable<{ message: string }> {

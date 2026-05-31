@@ -1,10 +1,9 @@
 <header class="header">
-
   <a class="header__logo" routerLink="/">
     <img src="assets/images/enjoyhub.png" alt="enjoyhub" class="header__logo-img" />
   </a>
 
-  <div class="header__dropdown" [class.header__dropdown--open]="dropdownOpen()">
+  <div class="header__dropdown" [ngClass]="{ 'header__dropdown--open': dropdownOpen() }">
     <button class="header__dropdown-name" (click)="toggleDropdown()">
       <fa-icon [icon]="activeCategoryIcon()" class="header__dropdown-icon" />
       <span>{{ activeCategoryLabel() }}</span>
@@ -13,14 +12,14 @@
 
     @if (dropdownOpen()) {
       <ul class="header__dropdown-menu">
-        @for (cat of categories; track cat.id) {
+        @for (category of categories; track category.id) {
           <li
             class="header__dropdown-item"
-            [class.header__dropdown-item--active]="cat.id === activeCategory()"
-            (click)="selectCategory(cat)"
+            [ngClass]="{ 'header__dropdown-item--active': category.id === activeCategory() }"
+            (click)="selectCategory(category)"
           >
-            <fa-icon [icon]="cat.icon" />
-            <span>{{ cat.label }}</span>
+            <fa-icon [icon]="category.icon" />
+            <span>{{ category.label }}</span>
           </li>
         }
       </ul>
@@ -28,18 +27,17 @@
   </div>
 
   <nav class="header__actions">
-    <button class="header__action-btn" type="button" (click)="goToDashboard()" title="My lists">
+    <button class="header__action-btn" type="button" (click)="goToDashboard()">
       <fa-icon [icon]="icons.faList" />
     </button>
 
     @if (isAdmin()) {
-      <button class="header__action-btn" type="button" (click)="goToAdmin()" title="Admin panel">
+      <button class="header__action-btn" type="button" (click)="goToAdmin()">
         <fa-icon [icon]="icons.faShieldHalved" />
       </button>
     }
-
-    <div class="header__user" [class.header__user--open]="userMenuOpen()">
-      <button class="header__action-btn" (click)="toggleUserMenu()" title="My account">
+    <div class="header__user" [ngClass]="{ 'header__user--open': userMenuOpen() }">
+      <button class="header__action-btn" (click)="toggleUserMenu()">
         <fa-icon [icon]="currentUserIcon()" />
       </button>
 
@@ -61,7 +59,7 @@
                     <button
                       type="button"
                       class="header__user-icon-btn"
-                      [class.header__user-icon-btn--selected]="currentUser()!.profileIcon === item.id"
+                      [ngClass]="{ 'header__user-icon-btn--selected': currentUser()!.profileIcon === item.id }"
                       (click)="onSelectIcon(item.id)"
                       [title]="item.label"
                     >
@@ -81,7 +79,6 @@
                 </button>
               </div>
             </div>
-
           } @else {
             <form class="header__auth-form" [formGroup]="loginForm" (ngSubmit)="onLogin()">
               <h3 class="header__auth-title">Sign in</h3>
@@ -95,14 +92,12 @@
                 formControlName="email"
                 type="email"
                 placeholder="Email"
-                autocomplete="email"
               />
               <input
                 class="header__auth-input"
                 formControlName="password"
                 type="password"
                 placeholder="Password"
-                autocomplete="current-password"
               />
 
               <button
@@ -112,7 +107,6 @@
               >
                 {{ authLoading() ? 'Loading...' : 'Sign in' }}
               </button>
-
               <p class="header__auth-switch">
                 Don't have an account?
                 <button
@@ -130,5 +124,4 @@
       }
     </div>
   </nav>
-
 </header>

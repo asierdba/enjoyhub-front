@@ -9,10 +9,8 @@
 <div class="dashboard">
 
   <aside class="dashboard__sidebar">
-
     <section class="dashboard__section">
       <h3 class="dashboard__section-title">New list</h3>
-
       @if (createError()) {
         <p class="dashboard__create-error">{{ createError() }}</p>
       }
@@ -51,7 +49,7 @@
           @for (list of lists(); track list.listId) {
             <li
               class="dashboard__list-item"
-              [class.dashboard__list-item--active]="selectedList()?.listId === list.listId"
+              [ngClass]="{ 'dashboard__list-item--active': selectedList()?.listId === list.listId }"
               (click)="selectList(list)"
             >
               <fa-icon [icon]="icons.faLayerGroup" />
@@ -76,7 +74,6 @@
     </section>
 
   </aside>
-
   <main class="dashboard__main">
 
     @if (!selectedList()) {
@@ -135,7 +132,6 @@
       }
 
     }
-
   </main>
 
 </div>
@@ -175,6 +171,7 @@
             rows="3"
           ></textarea>
         </div>
+
         <button
           class="list-edit-modal__submit"
           type="submit"

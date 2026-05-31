@@ -27,7 +27,6 @@
               class="ep-modal__input"
               formControlName="userName"
               type="text"
-              autocomplete="username"
             />
           </div>
           <div class="ep-modal__field">
@@ -37,7 +36,6 @@
               class="ep-modal__input"
               formControlName="email"
               type="email"
-              autocomplete="email"
             />
           </div>
           <button
@@ -71,7 +69,6 @@
               class="ep-modal__input"
               formControlName="currentPassword"
               type="password"
-              autocomplete="current-password"
             />
           </div>
           <div class="ep-modal__field">
@@ -81,18 +78,16 @@
               class="ep-modal__input"
               formControlName="newPassword"
               type="password"
-              placeholder="Min. 8 chars, 1 uppercase, 1 number"
-              autocomplete="new-password"
             />
             @if (passwordForm.get('newPassword')?.dirty) {
               <div class="ep-modal__pw-reqs">
-                <span class="ep-modal__pw-req" [class.ep-modal__pw-req--ok]="newPwHasLength">
+                <span class="ep-modal__pw-req" [ngClass]="{ 'ep-modal__pw-req--ok': newPwHasLength }">
                   {{ newPwHasLength ? '✓' : '✗' }} At least 8 characters
                 </span>
-                <span class="ep-modal__pw-req" [class.ep-modal__pw-req--ok]="newPwHasUpper">
+                <span class="ep-modal__pw-req" [ngClass]="{ 'ep-modal__pw-req--ok': newPwHasUpper }">
                   {{ newPwHasUpper ? '✓' : '✗' }} At least 1 uppercase letter
                 </span>
-                <span class="ep-modal__pw-req" [class.ep-modal__pw-req--ok]="newPwHasNumber">
+                <span class="ep-modal__pw-req" [ngClass]="{ 'ep-modal__pw-req--ok': newPwHasNumber }">
                   {{ newPwHasNumber ? '✓' : '✗' }} At least 1 number
                 </span>
               </div>
@@ -103,10 +98,9 @@
             <input
               id="ep-confirm"
               class="ep-modal__input"
-              [class.ep-modal__input--error]="passwordMismatch"
+              [ngClass]="{ 'ep-modal__input--error': passwordMismatch }"
               formControlName="confirmPassword"
               type="password"
-              autocomplete="new-password"
             />
             @if (passwordMismatch) {
               <span class="ep-modal__field-error">Passwords do not match</span>
@@ -119,6 +113,7 @@
           >
             {{ loading() ? 'Saving...' : 'Change password' }}
           </button>
+
         </form>
       }
 

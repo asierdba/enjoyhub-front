@@ -18,14 +18,13 @@
       @for (emotion of emotions(); track emotion.emotionId) {
         <button
           class="home__pill"
-          [class.home__pill--active]="pendingEmotion()?.emotionId === emotion.emotionId"
+          [ngClass]="{ 'home__pill--active': pendingEmotion()?.emotionId === emotion.emotionId }"
           (click)="pickEmotion(emotion)"
         >
           {{ emotion.emotionName }}
         </button>
       }
     </div>
-
     <button
       class="home__confirm-btn"
       [disabled]="!pendingEmotion()"
@@ -56,7 +55,6 @@
             <p class="home__state-text">No content found for this emotion</p>
           </div>
         }
-
         @case ('exhausted') {
           <div class="home__state">
             <fa-icon [icon]="icons.faCheck" class="home__state-icon home__state-icon--accent" />
@@ -90,6 +88,7 @@
                   <span class="home__card-book-detail">{{ currentContent()!.book!.pageCount }} pages</span>
                 }
               </div>
+
               @if (currentContent()!.description) {
                 <p class="home__card-desc">{{ currentContent()!.description }}</p>
               }
@@ -104,7 +103,7 @@
             <div
               class="home__card"
               draggable="true"
-              [class.home__card--dragging]="dragging()"
+              [ngClass]="{ 'home__card--dragging': dragging() }"
               (dragstart)="onDragStart($event)"
               (dragend)="onDragEnd()"
             >
@@ -124,13 +123,13 @@
 
   <aside
     class="home__col home__col--right"
-    [class.home__col--drag-over]="isDragOver() && isLoggedIn()"
+    [ngClass]="{ 'home__col--drag-over': isDragOver() && isLoggedIn() }"
     (dragover)="onDragOver($event)"
     (dragleave)="onDragLeave($event)"
     (drop)="onDrop($event)"
   >
     <div class="home__step-header">
-      <span class="home__step-badge" [class.home__step-badge--active]="stageState() === 'card'">3</span>
+      <span class="home__step-badge" [ngClass]="{ 'home__step-badge--active': stageState() === 'card' }">3</span>
       <p class="home__step-title">Save to a list</p>
     </div>
 
@@ -148,7 +147,7 @@
 
       } @else {
 
-        <div class="home__list-selector" [class.home__list-selector--open]="listDropdownOpen()">
+        <div class="home__list-selector" [ngClass]="{ 'home__list-selector--open': listDropdownOpen() }">
           <button class="home__list-selector-btn" (click)="listDropdownOpen.update(v => !v)">
             <span>{{ selectedList()?.listName ?? 'Select a list' }}</span>
             <fa-icon [icon]="icons.faChevronDown" class="home__list-selector-arrow" />
@@ -158,7 +157,7 @@
               @for (list of userLists(); track list.listId) {
                 <li
                   class="home__list-selector-item"
-                  [class.home__list-selector-item--active]="list.listId === selectedListId()"
+                  [ngClass]="{ 'home__list-selector-item--active': list.listId === selectedListId() }"
                   (click)="selectList(list.listId)"
                 >
                   {{ list.listName }}
@@ -168,7 +167,7 @@
           }
         </div>
 
-        <div class="home__drop-zone" [class.home__drop-zone--active]="isDragOver()">
+        <div class="home__drop-zone" [ngClass]="{ 'home__drop-zone--active': isDragOver() }">
           @if (isDragOver()) {
             <div class="home__drop-hint">
               <span>Drop to add to<br><strong>{{ selectedList()?.listName }}</strong></span>
@@ -194,13 +193,8 @@
             </div>
           }
         </div>
-
       }
-
     </div>
-
   </aside>
-
   }
-
 </div>

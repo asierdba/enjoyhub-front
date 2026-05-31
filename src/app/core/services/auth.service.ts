@@ -4,12 +4,6 @@ import { Observable, tap } from 'rxjs';
 import { User } from '../models/user.model';
 import { environment } from '../../../environments/environment';
 
-interface AuthResponse {
-  message: string;
-  token: string;
-  user: User;
-}
-
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private http = inject(HttpClient);
@@ -28,15 +22,15 @@ export class AuthService {
     }
   }
 
-  login(email: string, password: string): Observable<AuthResponse> {
+  login(email: string, password: string): Observable<any> {
     return this.http
-      .post<AuthResponse>(`${environment.apiUrl}/login`, { email, password })
+      .post<any>(`${environment.apiUrl}/login`, { email, password })
       .pipe(tap(res => this.handleAuth(res)));
   }
 
-  register(userName: string, email: string, password: string, profileIcon: string): Observable<AuthResponse> {
+  register(userName: string, email: string, password: string, profileIcon: string): Observable<any> {
     return this.http
-      .post<AuthResponse>(`${environment.apiUrl}/register`, { userName, email, password, profileIcon })
+      .post<any>(`${environment.apiUrl}/register`, { userName, email, password, profileIcon })
       .pipe(tap(res => this.handleAuth(res)));
   }
 
@@ -67,7 +61,7 @@ export class AuthService {
     this.currentUser.set(null);
   }
 
-  private handleAuth(res: AuthResponse): void {
+  private handleAuth(res: any): void {
     localStorage.setItem('token', res.token);
     this.currentUser.set(res.user);
   }

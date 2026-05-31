@@ -12,11 +12,6 @@ export const routes: Routes = [
     loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent),
   },
   {
-    path: 'profile',
-    canActivate: [authGuard],
-    loadComponent: () => import('./features/user-profile/user-profile.component').then(m => m.UserProfileComponent),
-  },
-  {
     path: 'legal',
     loadComponent: () => import('./features/legal/legal.component').then(m => m.LegalComponent),
   },
@@ -24,9 +19,5 @@ export const routes: Routes = [
     path: 'admin',
     canActivate: [adminGuard],
     loadComponent: () => import('./features/admin/admin.component').then(m => m.AdminComponent),
-  },
-  {
-    path: '**',
-    redirectTo: '',
   },
 ];

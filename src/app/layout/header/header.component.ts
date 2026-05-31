@@ -1,4 +1,5 @@
 import { Component, computed, inject, signal, HostListener } from '@angular/core';
+import { NgClass } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
@@ -31,7 +32,7 @@ interface Category {
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, FontAwesomeModule, ReactiveFormsModule],
+  imports: [RouterLink, FontAwesomeModule, ReactiveFormsModule, NgClass],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
@@ -48,23 +49,23 @@ export class HeaderComponent {
   isAdmin = this.authService.isAdmin;
 
   categories: Category[] = [
-    { id: 'book',   label: 'Books',       icon: faBook    },
-    { id: 'movie',  label: 'Movies',      icon: faFilm    },
-    { id: 'series', label: 'Series',      icon: faTv      },
-    { id: 'game',   label: 'Videogames', icon: faGamepad },
+    { id: 'book', label: 'Books', icon: faBook },
+    { id: 'movie', label: 'Movies', icon: faFilm },
+    { id: 'series', label: 'Series', icon: faTv },
+    { id: 'game', label: 'Videogames', icon: faGamepad },
   ];
 
   dropdownOpen = signal(false);
   userMenuOpen = signal(false);
-  authError    = signal<string | null>(null);
+  authError = signal<string | null>(null);
   authLoading  = signal(false);
 
-  currentUser  = this.authService.currentUser;
+  currentUser = this.authService.currentUser;
   profileIcons = PROFILE_ICONS;
 
-  readonly activeCategory      = computed(() => this.themeService.activeCategory());
+  readonly activeCategory = computed(() => this.themeService.activeCategory());
   readonly activeCategoryLabel = computed(() =>
-    this.categories.find(c => c.id === this.activeCategory())?.label ?? ''
+    this.categories.find(category => category.id === this.activeCategory())?.label ?? ''
   );
   readonly activeCategoryIcon  = computed(() =>
     this.categories.find(c => c.id === this.activeCategory())?.icon ?? faBook
@@ -75,7 +76,7 @@ export class HeaderComponent {
   });
 
   loginForm = this.fb.group({
-    email:    ['', [Validators.required, Validators.email]],
+    email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
 
@@ -119,21 +120,30 @@ export class HeaderComponent {
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent): void {
     const target = event.target as HTMLElement;
-    if (!target.closest('.header__dropdown')) this.dropdownOpen.set(false);
-    if (!target.closest('.header__user'))     this.userMenuOpen.set(false);
+
+    if (!target.closest('.header__dropdown')) { 
+      this.dropdownOpen.set(false) };
+
+    if (!target.closest('.header__user')) {
+      this.userMenuOpen.set(false) };
   }
 
   onLogin(): void {
-    if (this.loginForm.invalid || this.authLoading()) return;
+    if (this.loginForm.invalid || this.authLoading()) { 
+      return 
+    };
+
     this.authError.set(null);
     this.authLoading.set(true);
     const { email, password } = this.loginForm.value;
     this.authService.login(email!, password!).subscribe({
+
       next: () => {
         this.authLoading.set(false);
         this.userMenuOpen.set(false);
         this.loginForm.reset();
       },
+
       error: (err) => {
         this.authLoading.set(false);
         this.authError.set(err?.error?.message ?? 'Incorrect credentials');
@@ -153,7 +163,9 @@ export class HeaderComponent {
 
   onSelectIcon(iconId: string): void {
     const userId = this.authService.currentUser()?.userId;
-    if (!userId) return;
+    if (!userId) {
+      return };
+
     this.authService.updateProfileIcon(userId, iconId).subscribe({
       error: () => {},
     });

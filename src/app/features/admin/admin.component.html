@@ -5,7 +5,7 @@
     <nav class="admin__nav">
       <button
         class="admin__nav-btn"
-        [class.admin__nav-btn--active]="activeTab() === 'import'"
+        [ngClass]="{ 'admin__nav-btn--active': activeTab() === 'import' }"
         (click)="setTab('import')"
       >
         <fa-icon [icon]="icons.faCloudArrowDown" />
@@ -13,7 +13,7 @@
       </button>
       <button
         class="admin__nav-btn"
-        [class.admin__nav-btn--active]="activeTab() === 'users'"
+        [ngClass]="{ 'admin__nav-btn--active': activeTab() === 'users' }"
         (click)="setTab('users')"
       >
         <fa-icon [icon]="icons.faUsers" />
@@ -21,7 +21,7 @@
       </button>
       <button
         class="admin__nav-btn"
-        [class.admin__nav-btn--active]="activeTab() === 'messages'"
+        [ngClass]="{ 'admin__nav-btn--active': activeTab() === 'messages' }"
         (click)="setTab('messages')"
       >
         <fa-icon [icon]="icons.faEnvelope" />
@@ -31,11 +31,10 @@
   </aside>
 
   <main class="admin__main">
-
     @if (activeTab() === 'import') {
       <div class="admin__section-header">
         <h2 class="admin__section-title">Import books</h2>
-        <p class="admin__section-sub">Fetches 10 books from a random genre via Google Books and assigns emotions via AI.</p>
+        <p class="admin__section-sub">Fetches 10 books from a random genre via Google Books.</p>
       </div>
 
       <div class="admin__import-card">
@@ -61,7 +60,6 @@
         <h2 class="admin__section-title">Users</h2>
         <p class="admin__section-sub">{{ users().length }} registered users — click to edit</p>
       </div>
-
       @if (usersLoading()) {
         <p class="admin__loading">Loading users...</p>
       } @else {
@@ -129,7 +127,6 @@
       @if (editError()) {
         <p class="admin-modal__error">{{ editError() }}</p>
       }
-
       <div class="admin-modal__form">
         <div class="admin-modal__field">
           <label class="admin-modal__label">Username</label>

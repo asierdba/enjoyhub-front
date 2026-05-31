@@ -1,13 +1,10 @@
 <app-header />
-
 <div class="app-body">
   <main class="app-main">
     <router-outlet />
   </main>
-  <app-lists-panel />
 </div>
-
 <app-footer />
 <app-register />
 <app-edit-profile-modal />
-<app-toast />
+<ngx-sonner-toaster theme="dark" position="bottom-right" [richColors]="true" />
