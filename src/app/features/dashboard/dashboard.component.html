@@ -1,0 +1,238 @@
+@if (activeCategory() !== 'book') {
+  <div class="dashboard__wip">
+    <fa-icon [icon]="icons.faHammer" class="dashboard__wip-icon" />
+    <p class="dashboard__wip-title">Coming soon</p>
+    <p class="dashboard__wip-text">This section is under development. Check back soon!</p>
+  </div>
+} @else {
+
+<div class="dashboard">
+
+  <aside class="dashboard__sidebar">
+    <section class="dashboard__section">
+      <h3 class="dashboard__section-title">New list</h3>
+      @if (createError()) {
+        <p class="dashboard__create-error">{{ createError() }}</p>
+      }
+
+      <form class="dashboard__create-form" [formGroup]="createForm" (ngSubmit)="onCreateList()">
+        <input
+          class="dashboard__input"
+          formControlName="name"
+          type="text"
+          placeholder="List name"
+        />
+        <textarea
+          class="dashboard__textarea"
+          formControlName="description"
+          placeholder="Description (optional)"
+          rows="2"
+        ></textarea>
+        <button
+          class="dashboard__create-btn"
+          type="submit"
+          [disabled]="createForm.invalid || createLoading()"
+        >
+          <fa-icon [icon]="icons.faPlus" />
+          {{ createLoading() ? 'Creating...' : 'Create list' }}
+        </button>
+      </form>
+    </section>
+
+    <section class="dashboard__section">
+      <h3 class="dashboard__section-title">My lists</h3>
+
+      @if (lists().length === 0) {
+        <p class="dashboard__hint">No lists yet</p>
+      } @else {
+        <ul class="dashboard__list-selector">
+          @for (list of lists(); track list.listId) {
+            <li
+              class="dashboard__list-item"
+              [ngClass]="{ 'dashboard__list-item--active': selectedList()?.listId === list.listId }"
+              (click)="selectList(list)"
+            >
+              <fa-icon [icon]="icons.faLayerGroup" />
+              <div class="dashboard__list-meta">
+                <span class="dashboard__list-name">{{ list.listName }}</span>
+                @if (list.listDescription) {
+                  <span class="dashboard__list-desc">{{ list.listDescription }}</span>
+                }
+              </div>
+              <button
+                class="dashboard__list-edit"
+                type="button"
+                (click)="openEditModal(list, $event)"
+                title="Edit list"
+              >
+                <fa-icon [icon]="icons.faPen" />
+              </button>
+            </li>
+          }
+        </ul>
+      }
+    </section>
+
+  </aside>
+  <main class="dashboard__main">
+
+    @if (!selectedList()) {
+      <div class="dashboard__empty">
+        <fa-icon [icon]="icons.faLayerGroup" class="dashboard__empty-icon" />
+        <p>Select or create a list to see its content</p>
+      </div>
+
+    } @else {
+
+      <div class="dashboard__main-header">
+        <div class="dashboard__main-title-group">
+          <h2 class="dashboard__main-title">{{ selectedList()!.listName }}</h2>
+          <button
+            class="dashboard__main-edit-btn"
+            type="button"
+            (click)="openEditModal(selectedList()!, $event)"
+            title="Edit list"
+          >
+            <fa-icon [icon]="icons.faPen" />
+          </button>
+        </div>
+        <button
+          class="dashboard__delete-list-btn"
+          type="button"
+          (click)="deleteList()"
+          [disabled]="deleteLoading()"
+        >
+          <fa-icon [icon]="icons.faTrash" />
+          {{ deleteLoading() ? 'Deleting...' : 'Delete list' }}
+        </button>
+      </div>
+
+      @if (listItems().length === 0) {
+        <p class="dashboard__hint">This list has no content yet</p>
+      } @else {
+        <div class="dashboard__grid">
+          @for (item of listItems(); track item.contentId) {
+            <div class="dashboard__card" (click)="openContent(item)">
+              <img class="dashboard__card-img" [src]="item.image" [alt]="item.title" />
+              <div class="dashboard__card-overlay">
+                <span class="dashboard__card-title">{{ item.title }}</span>
+                <span class="dashboard__card-year">{{ item.releaseYear }}</span>
+              </div>
+              <button
+                class="dashboard__card-remove"
+                type="button"
+                (click)="removeItem(item.contentId, $event)"
+                title="Remove from list"
+              >
+                <fa-icon [icon]="icons.faTrash" />
+              </button>
+            </div>
+          }
+        </div>
+      }
+
+    }
+  </main>
+
+</div>
+
+}
+
+@if (editingList()) {
+  <div class="list-edit-overlay" (click)="closeEditModal()">
+    <div class="list-edit-modal" (click)="$event.stopPropagation()">
+
+      <button class="list-edit-modal__close" type="button" (click)="closeEditModal()">
+        <fa-icon [icon]="icons.faXmark" />
+      </button>
+
+      <div class="list-edit-modal__header">
+        <h2 class="list-edit-modal__title">Edit list</h2>
+        <p class="list-edit-modal__subtitle">Change the name or description</p>
+      </div>
+
+      <form class="list-edit-modal__form" [formGroup]="editForm" (ngSubmit)="submitEdit()">
+        <div class="list-edit-modal__field">
+          <label class="list-edit-modal__label" for="edit-name">Name</label>
+          <input
+            id="edit-name"
+            class="list-edit-modal__input"
+            formControlName="name"
+            type="text"
+          />
+        </div>
+        <div class="list-edit-modal__field">
+          <label class="list-edit-modal__label" for="edit-desc">Description</label>
+          <textarea
+            id="edit-desc"
+            class="list-edit-modal__textarea"
+            formControlName="description"
+            placeholder="Optional"
+            rows="3"
+          ></textarea>
+        </div>
+
+        <button
+          class="list-edit-modal__submit"
+          type="submit"
+          [disabled]="editForm.invalid || editLoading()"
+        >
+          {{ editLoading() ? 'Saving...' : 'Save changes' }}
+        </button>
+      </form>
+
+    </div>
+  </div>
+}
+
+@if (selectedContent()) {
+  <div class="content-modal-overlay" (click)="closeContent()">
+    <div class="content-modal" (click)="$event.stopPropagation()">
+
+      <button class="content-modal__close" type="button" (click)="closeContent()">
+        <fa-icon [icon]="icons.faXmark" />
+      </button>
+
+      <div class="content-modal__inner">
+
+        <div class="content-modal__hero">
+          <div class="content-modal__cover">
+            @if (selectedContent()!.image) {
+              <img [src]="selectedContent()!.image" [alt]="selectedContent()!.title" />
+            }
+          </div>
+
+          <div class="content-modal__meta">
+            <span class="content-modal__type">{{ typeLabel(selectedContent()!.type) }}</span>
+            <h2 class="content-modal__title">{{ selectedContent()!.title }}</h2>
+
+            @if (selectedContent()!.authors?.length) {
+              <span class="content-modal__authors">{{ authorNames(selectedContent()!) }}</span>
+            }
+            @if (selectedContent()!.releaseYear) {
+              <span class="content-modal__detail">{{ selectedContent()!.releaseYear }}</span>
+            }
+            @if (selectedContent()!.genres?.length) {
+              <span class="content-modal__detail">{{ genreNames(selectedContent()!) }}</span>
+            }
+            @if (selectedContent()!.book?.publisher) {
+              <span class="content-modal__detail">{{ selectedContent()!.book!.publisher }}</span>
+            }
+            @if (selectedContent()!.book?.isbn) {
+              <span class="content-modal__detail">ISBN · {{ selectedContent()!.book!.isbn }}</span>
+            }
+            @if (selectedContent()!.book?.pageCount) {
+              <span class="content-modal__detail">{{ selectedContent()!.book!.pageCount }} pages</span>
+            }
+          </div>
+        </div>
+
+        @if (selectedContent()!.description) {
+          <p class="content-modal__desc">{{ selectedContent()!.description }}</p>
+        }
+
+      </div>
+
+    </div>
+  </div>
+}

@@ -1,0 +1,127 @@
+<header class="header">
+  <a class="header__logo" routerLink="/">
+    <img src="assets/images/enjoyhub.png" alt="enjoyhub" class="header__logo-img" />
+  </a>
+
+  <div class="header__dropdown" [ngClass]="{ 'header__dropdown--open': dropdownOpen() }">
+    <button class="header__dropdown-name" (click)="toggleDropdown()">
+      <fa-icon [icon]="activeCategoryIcon()" class="header__dropdown-icon" />
+      <span>{{ activeCategoryLabel() }}</span>
+      <fa-icon [icon]="icons.faChevronDown" class="header__dropdown-arrow" />
+    </button>
+
+    @if (dropdownOpen()) {
+      <ul class="header__dropdown-menu">
+        @for (category of categories; track category.id) {
+          <li
+            class="header__dropdown-item"
+            [ngClass]="{ 'header__dropdown-item--active': category.id === activeCategory() }"
+            (click)="selectCategory(category)"
+          >
+            <fa-icon [icon]="category.icon" />
+            <span>{{ category.label }}</span>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+
+  <nav class="header__actions">
+    <button class="header__action-btn" type="button" (click)="goToDashboard()">
+      <fa-icon [icon]="icons.faList" />
+    </button>
+
+    @if (isAdmin()) {
+      <button class="header__action-btn" type="button" (click)="goToAdmin()">
+        <fa-icon [icon]="icons.faShieldHalved" />
+      </button>
+    }
+    <div class="header__user" [ngClass]="{ 'header__user--open': userMenuOpen() }">
+      <button class="header__action-btn" (click)="toggleUserMenu()">
+        <fa-icon [icon]="currentUserIcon()" />
+      </button>
+
+      @if (userMenuOpen()) {
+        <div class="header__user-panel">
+
+          @if (currentUser()) {
+            <div class="header__user-logged">
+              <div class="header__user-top">
+                <p class="header__user-greeting">Hello, <strong>{{ currentUser()!.userName }}</strong></p>
+                <button class="header__user-logout" (click)="onLogout()" title="Sign out">
+                  <fa-icon [icon]="icons.faRightFromBracket" />
+                </button>
+              </div>
+              <div class="header__user-avatar">
+                <span class="header__user-avatar-label">Your avatar</span>
+                <div class="header__user-icons">
+                  @for (item of profileIcons; track item.id) {
+                    <button
+                      type="button"
+                      class="header__user-icon-btn"
+                      [ngClass]="{ 'header__user-icon-btn--selected': currentUser()!.profileIcon === item.id }"
+                      (click)="onSelectIcon(item.id)"
+                      [title]="item.label"
+                    >
+                      <fa-icon [icon]="item.icon" />
+                    </button>
+                  }
+                </div>
+              </div>
+              <div class="header__user-actions">
+                <button class="header__user-action-btn" type="button" (click)="openEditProfile()">
+                  <fa-icon [icon]="icons.faPen" />
+                  Edit profile
+                </button>
+                <button class="header__user-action-btn" type="button" (click)="openEditPassword()">
+                  <fa-icon [icon]="icons.faKey" />
+                  Change password
+                </button>
+              </div>
+            </div>
+          } @else {
+            <form class="header__auth-form" [formGroup]="loginForm" (ngSubmit)="onLogin()">
+              <h3 class="header__auth-title">Sign in</h3>
+
+              @if (authError()) {
+                <p class="header__auth-error">{{ authError() }}</p>
+              }
+
+              <input
+                class="header__auth-input"
+                formControlName="email"
+                type="email"
+                placeholder="Email"
+              />
+              <input
+                class="header__auth-input"
+                formControlName="password"
+                type="password"
+                placeholder="Password"
+              />
+
+              <button
+                class="header__auth-submit"
+                type="submit"
+                [disabled]="loginForm.invalid || authLoading()"
+              >
+                {{ authLoading() ? 'Loading...' : 'Sign in' }}
+              </button>
+              <p class="header__auth-switch">
+                Don't have an account?
+                <button
+                  class="header__auth-link"
+                  type="button"
+                  (click)="openRegisterModal()"
+                >
+                  Register here
+                </button>
+              </p>
+            </form>
+          }
+
+        </div>
+      }
+    </div>
+  </nav>
+</header>

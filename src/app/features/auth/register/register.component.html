@@ -1,0 +1,108 @@
+@if (modalService.isOpen()) {
+  <div class="register-overlay" (click)="close()">
+    <div class="register-modal" (click)="$event.stopPropagation()">
+
+      <button class="register-modal__close" type="button" (click)="close()">✕</button>
+
+      <div class="register-modal__header">
+        <h2 class="register-modal__title">Create account</h2>
+        <p class="register-modal__subtitle">Join and start saving your favourite content</p>
+      </div>
+
+      @if (authError()) {
+        <p class="register-modal__error">{{ authError() }}</p>
+      }
+
+      <form class="register-modal__form" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <div class="register-modal__field">
+          <label class="register-modal__label">Choose your avatar</label>
+          <div class="register-modal__icons">
+            @for (item of profileIcons; track item.id) {
+              <button
+                type="button"
+                class="register-modal__icon-btn"
+                [ngClass]="{ 'register-modal__icon-btn--selected': form.value.profileIcon === item.id }"
+                (click)="selectIcon(item.id)"
+                [title]="item.label"
+              >
+                <fa-icon [icon]="item.icon" />
+              </button>
+            }
+          </div>
+        </div>
+
+        <div class="register-modal__field">
+          <label class="register-modal__label" for="reg-userName">Username</label>
+          <input
+            id="reg-userName"
+            class="register-modal__input"
+            formControlName="userName"
+            type="text"
+            placeholder="Your username"
+          />
+        </div>
+
+        <div class="register-modal__field">
+          <label class="register-modal__label" for="reg-email">Email</label>
+          <input
+            id="reg-email"
+            class="register-modal__input"
+            formControlName="email"
+            type="email"
+            placeholder="email@example.com"
+          />
+        </div>
+
+        <div class="register-modal__field">
+          <label class="register-modal__label" for="reg-password">Password</label>
+          <input
+            id="reg-password"
+            class="register-modal__input"
+            formControlName="password"
+            type="password"
+            placeholder="Your password"
+          />
+          @if (form.get('password')?.dirty) {
+            <div class="register-modal__pw-reqs">
+              <span class="register-modal__pw-req" [ngClass]="{ 'register-modal__pw-req--ok': pwHasLength }">
+                {{ pwHasLength ? '✓' : '✗' }} At least 8 characters
+              </span>
+              <span class="register-modal__pw-req" [ngClass]="{ 'register-modal__pw-req--ok': pwHasUpper }">
+                {{ pwHasUpper ? '✓' : '✗' }} At least 1 uppercase letter
+              </span>
+              <span class="register-modal__pw-req" [ngClass]="{ 'register-modal__pw-req--ok': pwHasNumber }">
+                {{ pwHasNumber ? '✓' : '✗' }} At least 1 number
+              </span>
+            </div>
+          }
+        </div>
+
+        <div class="register-modal__field">
+          <label class="register-modal__label" for="reg-confirm">Confirm password</label>
+          <input
+            id="reg-confirm"
+            class="register-modal__input"
+            [ngClass]="{ 'register-modal__input--error': passwordMismatch }"
+            formControlName="confirmPassword"
+            type="password"
+            placeholder="Repeat your password"
+          />
+          @if (passwordMismatch) {
+            <span class="register-modal__field-error">Passwords do not match</span>
+          }
+        </div>
+
+        <button
+          class="register-modal__submit"
+          type="submit"
+          [disabled]="form.invalid || authLoading()"
+        >
+          {{ authLoading() ? 'Creating account...' : 'Create account' }}
+        </button>
+
+      </form>
+
+    </div>
+  </div>
+}

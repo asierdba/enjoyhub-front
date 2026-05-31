@@ -1,0 +1,69 @@
+<footer class="footer">
+  <div class="footer__content">
+
+    <div class="footer__col footer__col--brand">
+      <a routerLink="/" class="footer__logo">
+        <img src="assets/images/enjoyhub.png" alt="enjoyhub" class="footer__logo-img" />
+      </a>
+      <p class="footer__tagline">
+        Your platform to discover and organise all your favourite entertainment, effortlessly.
+      </p>
+      <div class="footer__social">
+        <a href="https://www.instagram.com/enjoyhub_daw/" class="footer__social-link" target="_blank">
+          <fa-icon [icon]="icons.faInstagram" />
+        </a>
+        <a href="https://x.com/enjoyhub_daw" class="footer__social-link" target="_blank">
+          <fa-icon [icon]="icons.faXTwitter" />
+        </a>
+        <a href="https://www.tiktok.com/@enjoyhub_daw" class="footer__social-link" target="_blank">
+          <fa-icon [icon]="icons.faTiktok" />
+        </a>
+      </div>
+    </div>
+
+    <div class="footer__col">
+      <h4 class="footer__col-title">Legal</h4>
+      <ul class="footer__links">
+        <li><a routerLink="/legal" class="footer__link">Privacy policy</a></li>
+        <li><a routerLink="/legal" class="footer__link">Terms of use</a></li>
+        <li><a routerLink="/legal" class="footer__link">Cookie policy</a></li>
+        <li><a routerLink="/legal" class="footer__link">Legal notice</a></li>
+      </ul>
+    </div>
+
+    <div class="footer__col">
+      <h4 class="footer__col-title">Contact</h4>
+        <form class="footer__form" [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+          <input
+            class="footer__input"
+            formControlName="name"
+            type="text"
+            placeholder="Your name"
+          />
+          <input
+            class="footer__input"
+            formControlName="email"
+            type="email"
+            placeholder="Your email"
+          />
+          <textarea
+            class="footer__textarea"
+            formControlName="message"
+            placeholder="Your message..."
+            rows="3"
+          ></textarea>
+          <button
+            class="footer__submit"
+            type="submit"
+            [disabled]="contactForm.invalid || loading()"
+          >
+            {{ loading() ? 'Sending...' : 'Send message' }}
+          </button>
+        </form>
+    </div>
+  </div>
+
+  <div class="footer__bottom">
+    <p class="footer__copyright">© {{ year }} enjoyhub. All rights reserved.</p>
+  </div>
+</footer>

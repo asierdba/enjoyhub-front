@@ -1,0 +1,214 @@
+<div class="admin">
+
+  <aside class="admin__sidebar">
+    <p class="admin__sidebar-title">Admin panel</p>
+    <nav class="admin__nav">
+      <button
+        class="admin__nav-btn"
+        [ngClass]="{ 'admin__nav-btn--active': activeTab() === 'import' }"
+        (click)="setTab('import')"
+      >
+        <fa-icon [icon]="icons.faCloudArrowDown" />
+        <span>Import books</span>
+      </button>
+      <button
+        class="admin__nav-btn"
+        [ngClass]="{ 'admin__nav-btn--active': activeTab() === 'users' }"
+        (click)="setTab('users')"
+      >
+        <fa-icon [icon]="icons.faUsers" />
+        <span>Users</span>
+      </button>
+      <button
+        class="admin__nav-btn"
+        [ngClass]="{ 'admin__nav-btn--active': activeTab() === 'messages' }"
+        (click)="setTab('messages')"
+      >
+        <fa-icon [icon]="icons.faEnvelope" />
+        <span>Messages</span>
+      </button>
+    </nav>
+  </aside>
+
+  <main class="admin__main">
+    @if (activeTab() === 'import') {
+      <div class="admin__section-header">
+        <h2 class="admin__section-title">Import books</h2>
+        <p class="admin__section-sub">Fetches 10 books from a random genre via Google Books.</p>
+      </div>
+
+      <div class="admin__import-card">
+        @if (importResult()) {
+          @if (importResult()!.count === 0) {
+            <p class="admin__import-zero">ERROR — 0 books imported</p>
+          } @else {
+            <div class="admin__import-result">
+              <span class="admin__import-count">{{ importResult()!.count }}</span>
+              <span>books imported successfully</span>
+            </div>
+          }
+        }
+        <button class="admin__import-btn" (click)="importBooks()" [disabled]="importing()">
+          <fa-icon [icon]="icons.faCloudArrowDown" />
+          {{ importing() ? 'Importing...' : 'Import 10 books' }}
+        </button>
+      </div>
+    }
+
+    @if (activeTab() === 'users') {
+      <div class="admin__section-header">
+        <h2 class="admin__section-title">Users</h2>
+        <p class="admin__section-sub">{{ users().length }} registered users — click to edit</p>
+      </div>
+      @if (usersLoading()) {
+        <p class="admin__loading">Loading users...</p>
+      } @else {
+        <div class="admin__user-list">
+          @for (user of users(); track user.userId) {
+            <div class="admin__user-card" (click)="openUserModal(user)">
+              <div class="admin__user-info">
+                <span class="admin__user-name">{{ user.userName }}</span>
+                <span class="admin__user-email">{{ user.email }}</span>
+              </div>
+              <div class="admin__user-right">
+                @if (user.role === 'admin') {
+                  <span class="admin__user-badge">admin</span>
+                }
+                <span class="admin__user-lists-count">{{ user.lists.length }} list{{ user.lists.length !== 1 ? 's' : '' }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    }
+
+    @if (activeTab() === 'messages') {
+      <div class="admin__section-header">
+        <h2 class="admin__section-title">Contact messages</h2>
+        <p class="admin__section-sub">{{ messages().length }} message{{ messages().length !== 1 ? 's' : '' }} received — click to read</p>
+      </div>
+
+      @if (messagesLoading()) {
+        <p class="admin__loading">Loading messages...</p>
+      } @else if (messages().length === 0) {
+        <p class="admin__loading">No messages yet.</p>
+      } @else {
+        <div class="admin__message-list">
+          @for (msg of messages(); track msg.id) {
+            <div class="admin__message-card" (click)="openMessageModal(msg)">
+              <div class="admin__message-info">
+                <span class="admin__message-name">{{ msg.name }}</span>
+                <span class="admin__message-email">{{ msg.email }}</span>
+              </div>
+              <span class="admin__message-date">{{ formatDate(msg.created_at) }}</span>
+            </div>
+          }
+        </div>
+      }
+    }
+
+  </main>
+
+</div>
+
+@if (selectedUser()) {
+  <div class="admin-modal-overlay" (click)="closeUserModal()">
+    <div class="admin-modal" (click)="$event.stopPropagation()">
+
+      <button class="admin-modal__close" type="button" (click)="closeUserModal()">
+        <fa-icon [icon]="icons.faXmark" />
+      </button>
+
+      <div class="admin-modal__header">
+        <h2 class="admin-modal__title">Edit user</h2>
+        <p class="admin-modal__subtitle">{{ selectedUser()!.email }}</p>
+      </div>
+
+      @if (editError()) {
+        <p class="admin-modal__error">{{ editError() }}</p>
+      }
+      <div class="admin-modal__form">
+        <div class="admin-modal__field">
+          <label class="admin-modal__label">Username</label>
+          <input
+            class="admin-modal__input"
+            type="text"
+            [ngModel]="editUserName()"
+            (ngModelChange)="editUserName.set($event)"
+          />
+        </div>
+        <div class="admin-modal__field">
+          <label class="admin-modal__label">Email</label>
+          <input
+            class="admin-modal__input"
+            type="email"
+            [ngModel]="editEmail()"
+            (ngModelChange)="editEmail.set($event)"
+          />
+        </div>
+        <div class="admin-modal__field">
+          <label class="admin-modal__label">Role</label>
+          <select
+            class="admin-modal__select"
+            [ngModel]="editRole()"
+            (ngModelChange)="editRole.set($event)"
+          >
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="admin-modal__lists-section">
+        <p class="admin-modal__lists-title">Lists</p>
+        @if (selectedUser()!.lists.length === 0) {
+          <p class="admin-modal__lists-empty">No lists yet.</p>
+        } @else {
+          <div class="admin-modal__lists">
+            @for (list of selectedUser()!.lists; track list.listId) {
+              <div class="admin-modal__list-item">
+                <span class="admin-modal__list-name">{{ list.listName }}</span>
+                <button
+                  class="admin-modal__list-delete"
+                  type="button"
+                  (click)="deleteList(list.listId)"
+                  [disabled]="deletingListId() === list.listId"
+                >
+                  <fa-icon [icon]="icons.faTrash" />
+                </button>
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="admin-modal__actions">
+        <button class="admin-modal__cancel" type="button" (click)="closeUserModal()">Cancel</button>
+        <button class="admin-modal__save" type="button" (click)="saveUser()" [disabled]="editLoading()">
+          {{ editLoading() ? 'Saving...' : 'Save changes' }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+}
+
+@if (selectedMessage()) {
+  <div class="admin-modal-overlay" (click)="closeMessageModal()">
+    <div class="admin-modal" (click)="$event.stopPropagation()">
+
+      <button class="admin-modal__close" type="button" (click)="closeMessageModal()">
+        <fa-icon [icon]="icons.faXmark" />
+      </button>
+
+      <div class="admin-modal__header">
+        <h2 class="admin-modal__title">{{ selectedMessage()!.name }}</h2>
+        <p class="admin-modal__subtitle">{{ selectedMessage()!.email }}</p>
+        <p class="admin-modal__date">{{ formatDate(selectedMessage()!.created_at) }}</p>
+      </div>
+
+      <p class="admin-modal__message-text">{{ selectedMessage()!.message }}</p>
+
+    </div>
+  </div>
+}
